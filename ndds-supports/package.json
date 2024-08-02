@@ -1,0 +1,38 @@
+{
+    "name": "ndds-supports",
+    "publisher": "neknaj",
+    "author": "Bem130 <bem130@ymail.ne.jp> (https://github.com/bem130)",
+    "displayName": "NDDS Supports",
+    "description": "NDDS Supports - Syntax Highlight, Preview, Snippet for VSCode",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.91.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "activationEvents": [
+        "onCommand:extension.showPreview"
+    ],
+    "main": "./extension.js",
+    "contributes": {
+        "languages": [{
+            "id": "nml",
+            "aliases": ["neknaj markup language", "nml"],
+            "extensions": ["nml"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "nml",
+            "scopeName": "source.nml",
+            "path": "./syntaxes/nml.tmLanguage.json"
+        }],
+        "commands": [{
+            "command": "extension.showPreview",
+            "title": "show NDDS Preview"
+        }]
+    },
+    "devDependencies": {
+        "@types/vscode": "^1.91.0"
+    }
+}
