@@ -12,17 +12,24 @@
     function unescapeString(str) {
         return str.replace(/\\(.)/g, "$1");
     }
+    let loc = location;
 }
 
 start = &{ skipLines(options.n); skipChars(options.m); return true; } res:target (.*) { return res; }
 
-target = res:texttarget "\n" {return res}
+target = indent:(">>> "/"") res:texttarget "\n" { return {indent,res}; }
 texttarget = ((f:InlineFuncCall c:ChainFuncCall* {return {type:"InlineFuncCallSet",func:f,chain:c}})/nmltext)*
 
-nmltext = chars:(EscapedChar / [^\\\n!])+ { return {type:"NMLText",text:unescapeString(chars.join(""))}; }
+nmltext = chars:(EscapedChar / [^\\\n!\}])+ { return {type:"NMLText",text:unescapeString(chars.join(""))}; }
 
 
-InlineFuncCall = "!" name:FuncName normalargs:(("(" arg:NormalArg ")" {return arg})/("" {return []})) blockargs:(("[" arg:TXTArg "]" {return {type:"TXTArg",arg:arg};})/("{" arg:NMLArg "}" {return {type:"NMLArg",arg:arg};}))* { return {type:"InlineFuncCall",name:name,args:blockargs.concat(normalargs)} }
+InlineFuncCall = "!" name:FuncName
+                    normalargs:(("(" arg:NormalArg ")" {return arg})/("" {return []}))
+                    blockargs:(
+                        ("[" arg:TXTArg "]" {return {type:"TXTArg",arg:arg};})
+                        /("{" arg:NMLArg "}" {return {type:"NMLArg",arg:arg};})
+                    )*
+                    { return {type:"InlineFuncCall",name,blockargs,normalargs} }
 
 ChainFuncCall = "->" name:FuncName normalargs:(("(" arg:NormalArg ")" {return arg})/("" {return []})) { return {type:"ChainFuncCall",name:name,args:normalargs} }
 
@@ -32,6 +39,6 @@ NormalArg = (a:(InlineFuncCall/textArg/numberArg) b:("|" c:(InlineFuncCall/textA
 textArg = "\"" chars:(EscapedChar / [^\\\n\"])* "\"" { return unescapeString(chars.join("")); }
 numberArg = chars:([0-9_]/".")+ { return Number(chars.join("")); }
 TXTArg = chars:(EscapedChar / [^\\\n\]])* { return unescapeString(chars.join("")); }
-NMLArg = (InlineFuncCall/ (chars:(EscapedChar / [^\\\n!\}])+ { return unescapeString(chars.join("")); }))*
+NMLArg = texttarget
 
 EscapedChar = "\\" char:. { return char; }
