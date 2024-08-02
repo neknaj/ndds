@@ -1,8 +1,8 @@
-!doctitle{Neknaj Document Description System}
+!doctitle{Neknaj Document Description System}$
 
->>> !title{概要}
+>>> !title{概要}$
     これはBem130が作っているマークアップ言語と、それをWebブラウザで表示するためのツールです
 
->>> !title{特徴}
+>>> !title{特徴}$
     インデントによって入れ子構造を表現します
     別ファイルで定義したJavascriptの関数を呼び出せます
