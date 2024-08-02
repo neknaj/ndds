@@ -1,13 +1,16 @@
 .NDDS {
     white-space: break-spaces;
-
-    & div.nest {
+    
+    & div {
         margin: 10px;
         margin-left: 10px;
         padding: 5px;
+        border-radius: 10px;
+    }
+
+    & div.nest {
         padding-left: 15px;
         border-left: 1px solid rgba(255, 255, 255, 0.3);
-        border-radius: 10px;
     }
 
     & code {
@@ -17,11 +20,19 @@
     }
 
     & h1, h2, h3, h4, h5, h6 {
-        margin: 5px;
+        padding: 3px;
+        border-radius: 10px;
+        background-color: rgba(255, 255, 255, 0.1);
+        margin: 10px;
     }
 
     & .align-right { text-align: right; }
     & .align-center { text-align: center; }
     & .align-left { text-align: left; }
     & .align-justify { text-align: justify; }
+
+    & div.note {
+        background-color: rgba(223, 255, 222, 0.15);
+        width: fit-content;
+    }
 }

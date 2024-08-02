@@ -3,16 +3,19 @@ var Module = {};
 
 export function NMLLine(obj,module,parent) {
     Module = module;
-    return NML(obj.res,parent);
+    let res = NML(obj.res,[]);
+    for (let i of res) {
+        parent.Add(i);
+    }
 }
 
 function NML(obj,parent) {
     for (let i of obj) {
         if (i.type=="NMLText") {
-            parent.Add(NMLText(i));
+            parent.push(NMLText(i));
         }
         if (i.type=="InlineFuncCallSet") {
-            parent.Add(InlineFuncCallSet(i));
+            parent.push(InlineFuncCallSet(i));
         }
     }
     return parent;
@@ -27,7 +30,7 @@ function InlineFuncCallSet(obj) {
     let res = null;
     { // func
         let blockargs = InlineFuncCall_BlockArgs(obj.func.blockargs);
-        let args = blockargs.concat(obj.func.normalargs);
+        let args = [blockargs].concat(obj.func.normalargs);
         res = Module.default[obj.func.name](...args);
     }
     for (let i of obj.chain) {
@@ -41,10 +44,10 @@ function InlineFuncCall_BlockArgs(obj) {
     let res = [];
     for (let i of obj) {
         if (i.type=="NMLArg") {
-            res.push(NML(i.arg,elm("span",{},[])));
+            res.push(NML(i.arg,[]));
         }
         if (i.type=="TXTArg") {
-            res.push(i.arg);
+            res.push([elm("span",{},[textelm(i.arg)])]);
         }
     }
     return res;
