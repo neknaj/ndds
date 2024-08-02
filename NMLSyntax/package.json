@@ -1,0 +1,32 @@
+{
+	"name": "nmlsyntax",
+	"publisher": "neknaj",
+	"author": "Bem130 <bem130@ymail.ne.jp> (https://github.com/bem130)",
+	"displayName": "NML Syntax",
+	"description": "Provides NML Syntax Highlight for VSCode",
+	"version": "0.0.1",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/neknaj/ndds.git"
+    },
+	"categories": [
+		"Programming Languages"
+	],
+	"engines": {
+		"vscode": "^1.91.0"
+	},
+	"contributes": {
+		"languages": [{
+			"id": "nml",
+			"aliases": ["neknaj markup language", "nml"],
+			"extensions": ["nml"],
+			"configuration": "./language-configuration.json"
+		}],
+		"grammars": [{
+			"language": "nml",
+			"scopeName": "source.nml",
+			"path": "./syntaxes/nml.tmLanguage.json"
+		}]
+	}
+}
