@@ -30,11 +30,6 @@ document.getElementById('input').value = document.getElementById('input').value=
 var Runtime = {};
 var Module = {};
 
-
-function parse(ln,indent,input) {
-    var result;
-    return lineparser(input, { n: ln, m: indent*4 });
-}
 function convert() {
     let input = document.getElementById('input').value+"\n";
     output.innerHTML = "";
@@ -58,13 +53,16 @@ function converter(input,parent) {
             }
         }
         let line = lineparser(input,{line:ln,col:(nestList.length-1)*4});
+        console.log(line)
         if (line.indent==">>> ") { // インデント追加
             let newelm = elm("div",{class:["nest"]},[]);
             nestList.last().Add(newelm);
             nestList.push(newelm);
         }
-        nestList.last().Add(Runtime.NMLLine(line,Module));
-        nestList.last().Add(elm("br",{},[]));
+        if (line.res!=false) {
+            nestList.last().Add(Runtime.NMLLine(line,Module));
+            nestList.last().Add(elm("br",{},[]));
+        }
     }
 }
 function countIndent(ils,ln) {

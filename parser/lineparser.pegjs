@@ -15,7 +15,9 @@
     let loc = location;
 }
 
-start = &{ skipLines(options.line); skipChars(options.col); return true; } res:target (.*) { return res; }
+start = &{ skipLines(options.line); skipChars(options.col); return true; } res:(emptyline/target) (.*) { return res; }
+
+emptyline = indent:(">>> "/"") res:(("$\n" {return [{type:"NMLText",text:""}]})/("\n" {return false})) { return {indent,res}; }
 
 target = indent:(">>> "/"") res:texttarget "\n" { return {indent,res}; }
 texttarget = ((f:InlineFuncCall c:ChainFuncCall* {return {type:"InlineFuncCallSet",func:f,chain:c}})/nmltext)*
