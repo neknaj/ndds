@@ -40,3 +40,8 @@ Element.prototype.addProp = function(prop) {
     }
     return this;
 };
+
+Element.prototype.addClass = function(name) {
+    this.classList.add(name);
+    return this;
+}

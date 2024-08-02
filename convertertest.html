@@ -60,7 +60,7 @@ function converter(input,parent) {
             nestList.push(newelm);
         }
         if (line.res!=false) {
-            nestList.last().Add(Runtime.NMLLine(line,Module));
+            Runtime.NMLLine(line,Module,nestList.last());
             nestList.last().Add(elm("br",{},[]));
         }
     }

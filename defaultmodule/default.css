@@ -20,4 +20,9 @@
         margin: 5px;
         display: inline-block;
     }
+
+    & .align-right { text-align: right; }
+    & .align-center { text-align: center; }
+    & .align-left { text-align: left; }
+    & .align-justify { text-align: justify; }
 }

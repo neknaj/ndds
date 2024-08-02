@@ -15,3 +15,7 @@ export function doctitle(title) {
     document.getElementsByTagName("title")[0].innerHTML = title.innerText;
     return elm("h1",{},[title]);
 }
+
+export function align(dom,prop) {
+    return dom.addClass("align-"+prop);
+}
