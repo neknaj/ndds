@@ -11,9 +11,9 @@ const fs = require('fs');
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
-    outputChannel = vscode.window.createOutputChannel("NDDS Preview");
-    outputChannel.appendLine('Extension activated');
-    let disposable = vscode.commands.registerCommand('extension.showPreview', () => {
+    outputChannel = vscode.window.createOutputChannel("NDDS Supports");
+    outputChannel.appendLine('NDDS Extension activated');
+    const disposable = vscode.commands.registerCommand('extension.showPreview', () => { // プレビューウインドウ
         const panel = vscode.window.createWebviewPanel(
             'preview',
             'Preview',
@@ -32,8 +32,12 @@ function activate(context) {
             }
         });
     });
+    const defFuncProvider = vscode.languages.registerCompletionItemProvider('nml', new DefFuncCompletions(),"!"); // 関数補完
+    const IndentProvider = vscode.languages.registerCompletionItemProvider('nml', new IndentCompletions()); // インデントマーカー補完
 
     context.subscriptions.push(disposable);
+    context.subscriptions.push(defFuncProvider);
+    context.subscriptions.push(IndentProvider);
 }
 
 function updateContent(panel, context) {
@@ -54,6 +58,65 @@ function getWebviewContent(content, webview, context) {
     } catch (error) {
         console.error(`Failed to read HTML template: ${error}`);
         return `<html><body><p>Error: Could not load preview.</p></body></html>`;
+    }
+}
+
+
+class DefFuncCompletions
+{
+    provideCompletionItems()
+    {
+        const comp = [];
+        {
+            const sni = new vscode.CompletionItem("doctitle");
+            sni.insertText = new vscode.SnippetString("doctitle{${1}}$");
+            sni.kind = vscode.CompletionItemKind.Function;
+            comp.push(sni);
+        }
+        {
+            const sni = new vscode.CompletionItem("title - document");
+            sni.insertText = new vscode.SnippetString("doctitle{${1}}$");
+            sni.kind = vscode.CompletionItemKind.Function;
+            comp.push(sni);
+        }
+        {
+            const sni = new vscode.CompletionItem("title");
+            sni.insertText = new vscode.SnippetString("title{${1}}$");
+            sni.kind = vscode.CompletionItemKind.Function;
+            comp.push(sni);
+        }
+        {
+            const sni = new vscode.CompletionItem("code");
+            sni.insertText = new vscode.SnippetString("code[${1}]");
+            sni.kind = vscode.CompletionItemKind.Function;
+            comp.push(sni);
+        }
+        {
+            const sni = new vscode.CompletionItem("note");
+            sni.insertText = new vscode.SnippetString("note{${1}}");
+            sni.kind = vscode.CompletionItemKind.Function;
+            comp.push(sni);
+        }
+        {
+            const sni = new vscode.CompletionItem("align");
+            sni.insertText = new vscode.SnippetString("align(\"${1|center,right,left,justify|}\")");
+            sni.kind = vscode.CompletionItemKind.Function;
+            comp.push(sni);
+        }
+        return comp;
+    }
+}
+class IndentCompletions
+{
+    provideCompletionItems()
+    {
+        const comp = [];
+        {
+            const sni = new vscode.CompletionItem("indent");
+            sni.insertText = ">>> ";
+            comp.push(sni);
+        }
+        return comp;
     }
 }
 
