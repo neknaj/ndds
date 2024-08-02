@@ -59,8 +59,8 @@ function converter(input,parent) {
             nestList.last().Add(newelm);
             nestList.push(newelm);
         }
-        if (line.res!=false) {
-            Runtime.NMLLine(line,Module,nestList.last());
+        Runtime.NMLLine(line,Module,nestList.last());
+        if ((line.linebreak&&line.res.length!=0)||(!line.linebreak&&line.res.length==0)) {
             nestList.last().Add(elm("br",{},[]));
         }
     }

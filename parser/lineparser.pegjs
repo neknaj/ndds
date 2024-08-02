@@ -15,14 +15,13 @@
     let loc = location;
 }
 
-start = &{ skipLines(options.line); skipChars(options.col); return true; } res:(emptyline/target) (.*) { return res; }
+start = &{ skipLines(options.line); skipChars(options.col); return true; } res:target (.*) { return res; }
 
-emptyline = indent:(">>> "/"") res:(("$\n" {return [{type:"NMLText",text:""}]})/("\n" {return false})) { return {indent,res}; }
+target = indent:(">>> "/"") res:texttarget linebreak:("$"/"") "\n" { return {indent,res,linebreak:linebreak!="$"}; }
 
-target = indent:(">>> "/"") res:texttarget "\n" { return {indent,res}; }
 texttarget = ((f:InlineFuncCall c:ChainFuncCall* {return {type:"InlineFuncCallSet",func:f,chain:c}})/nmltext)*
 
-nmltext = chars:(EscapedChar / [^\\\n!\}])+ { return {type:"NMLText",text:unescapeString(chars.join(""))}; }
+nmltext = chars:(EscapedChar / [^\\\n!\}$])+ { return {type:"NMLText",text:unescapeString(chars.join(""))}; }
 
 
 InlineFuncCall = "!" name:FuncName
@@ -35,12 +34,12 @@ InlineFuncCall = "!" name:FuncName
 
 ChainFuncCall = "->" name:FuncName normalargs:(("(" arg:NormalArg ")" {return arg})/("" {return []})) { return {type:"ChainFuncCall",name:name,args:normalargs} }
 
-FuncName = a:([a-zA-Z_] / "$") b:([a-zA-Z0-9_] / "$")* { return a+b.join(""); }
+FuncName = a:([a-zA-Z_]) b:([a-zA-Z0-9_])* { return a+b.join(""); }
 
 NormalArg = (a:(InlineFuncCall/textArg/numberArg) b:("|" c:(InlineFuncCall/textArg/numberArg) {return c})* {return [a].concat(b)})/("" {return []})
 textArg = "\"" chars:(EscapedChar / [^\\\n\"])* "\"" { return unescapeString(chars.join("")); }
 numberArg = chars:([0-9_]/".")+ { return Number(chars.join("")); }
-TXTArg = chars:(EscapedChar / [^\\\n\]])* { return unescapeString(chars.join("")); }
+TXTArg = chars:("\\\\" / EscapedChar / [^\n\]])* { return unescapeString(chars.join("")); }
 NMLArg = texttarget
 
 EscapedChar = "\\" char:[^\\n] { return char; }
