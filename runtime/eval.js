@@ -1,4 +1,4 @@
-import { elm, textelm } from '../cdom.js';
+import { elm, textelm } from '../cdom_module.js';
 var Module = {};
 
 export function NMLLine(obj,module) {
@@ -7,10 +7,8 @@ export function NMLLine(obj,module) {
 }
 
 function NML(obj) {
-    console.log(obj)
     let p = elm("span",{},[]);
     for (let i of obj) {
-        console.log(i)
         if (i.type=="NMLText") {
             p.Add(NMLText(i));
         }
@@ -18,7 +16,6 @@ function NML(obj) {
             p.Add(InlineFuncCallSet(i));
         }
     }
-    console.log(p)
     return p;
 }
 
@@ -31,10 +28,8 @@ function InlineFuncCallSet(obj) {
     { // func
         let blockargs = InlineFuncCall_BlockArgs(obj.func.blockargs);
         let args = blockargs.concat(obj.func.normalargs);
-        console.log("args",args)
         res = Module.default[obj.func.name](...args);
     }
-    console.log(res);
     return res;
 }
 

@@ -1,4 +1,4 @@
-import { elm, textelm } from '../cdom.js';
+import { elm, textelm } from '../cdom_module.js';
 
 export function text(title) {
     return elm("span",{},[textelm(title)]);

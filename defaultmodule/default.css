@@ -1,6 +1,23 @@
-code {
+.NDDS {
     white-space: break-spaces;
-    background-color: rgb(32, 32, 37);
-    border-radius: 5px;
-    padding: 3px;
+
+    & div.nest {
+        margin: 10px;
+        margin-left: 10px;
+        padding: 5px;
+        padding-left: 15px;
+        border-left: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 10px;
+    }
+
+    & code {
+        background-color: rgb(32, 32, 37);
+        border-radius: 5px;
+        padding: 3px;
+    }
+
+    & h1, h2, h3, h4, h5, h6 {
+        margin: 5px;
+        display: inline-block;
+    }
 }

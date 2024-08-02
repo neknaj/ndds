@@ -15,7 +15,7 @@
     let loc = location;
 }
 
-start = &{ skipLines(options.n); skipChars(options.m); return true; } res:target (.*) { return res; }
+start = &{ skipLines(options.line); skipChars(options.col); return true; } res:target (.*) { return res; }
 
 target = indent:(">>> "/"") res:texttarget "\n" { return {indent,res}; }
 texttarget = ((f:InlineFuncCall c:ChainFuncCall* {return {type:"InlineFuncCallSet",func:f,chain:c}})/nmltext)*
@@ -41,4 +41,4 @@ numberArg = chars:([0-9_]/".")+ { return Number(chars.join("")); }
 TXTArg = chars:(EscapedChar / [^\\\n\]])* { return unescapeString(chars.join("")); }
 NMLArg = texttarget
 
-EscapedChar = "\\" char:. { return char; }
+EscapedChar = "\\" char:[^\\n] { return char; }

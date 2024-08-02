@@ -141,7 +141,7 @@ function peg$parse(input, options) {
       peg$startRuleFunctions = { start: peg$parsestart },
       peg$startRuleFunction  = peg$parsestart,
 
-      peg$c0 = function() { skipLines(options.n); skipChars(options.m); return true; },
+      peg$c0 = function() { skipLines(options.line); skipChars(options.col); return true; },
       peg$c1 = peg$anyExpectation(),
       peg$c2 = function(res) { return res; },
       peg$c3 = ">>> ",

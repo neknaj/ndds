@@ -1,4 +1,4 @@
-function elm(type, prop, children) {
+export function elm(type, prop, children) {
     const elm = document.createElement(type);
     const propkey = Object.keys(prop);
     for (const key of propkey) {
@@ -16,7 +16,7 @@ function elm(type, prop, children) {
     return elm;
 }
 
-function textelm(text) {
+export function textelm(text) {
     return document.createTextNode(text);
 }
 
