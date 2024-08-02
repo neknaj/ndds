@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NDDS Preview</title>
+    <link href="https://cdn.jsdelivr.net/gh/neknaj/ndds@2971fba/defaultmodule/default.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/gh/neknaj/ndds@2971fba/cdom.js"></script>
+</head>
+<body>
+    <div id="output" class="NDDS"></div>
+</body>
+</html>
+<script>module={}</script>
+<script src="https://cdn.jsdelivr.net/gh/neknaj/ndds@2971fba/parser/lineparser.js"></script>
+<script>const lineparser = module.exports.parse;</script>
+<script>
+
+Array.prototype.last = function(n=1) {
+    return this[this.length-n];
+};
+
+let input = `${content}`
+
+var Runtime = {};
+var Module = {};
+
+function convert() {
+    output.innerHTML = "";
+    converter(input,output);
+}
+
+function converter(input,parent) {
+    let inputlines = input.split("\n");
+    let lastLn = inputlines.length;
+    console.log(lastLn)
+    let nestList = [parent];
+    for (let ln=1;ln<lastLn;ln++) {
+        // line.indentがある場合、nestListにdiv要素を追加する (">>>" )
+        {
+            let newindent = countIndent(inputlines,ln);
+            console.log("indent",newindent)
+            console.log(newindent,nestList.length-1)
+            while (newindent<nestList.length-1) {
+                console.log("decr")
+                nestList.pop();
+            }
+        }
+        let line = lineparser(input,{line:ln,col:(nestList.length-1)*4});
+        console.log(line)
+        if (line.indent==">>> ") { // インデント追加
+            let newelm = elm("div",{class:["nest"]},[]);
+            nestList.last().Add(newelm);
+            nestList.push(newelm);
+        }
+        Runtime.NMLLine(line,Module,nestList.last());
+        if ((line.linebreak&&line.res.length!=0)||(!line.linebreak&&line.res.length==0)) {
+            nestList.last().Add(elm("br",{},[]));
+        }
+    }
+}
+function countIndent(ils,ln) {
+    let i = 0;
+    while (ils[ln-1][i]==" ") {i++;}
+    return i/4;
+}
+
+window.onload = async ()=>{
+    {
+        Runtime = await import('https://cdn.jsdelivr.net/gh/neknaj/ndds@2971fba/runtime/eval.js');
+        Module.default = await import('https://cdn.jsdelivr.net/gh/neknaj/ndds@2971fba/defaultmodule/default.js');
+    }
+    convert();
+}
+</script>
+<style>
+    :root {
+        color-scheme: dark;
+    }
+    body {
+        font-family: serif;
+        max-width: 1500px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: black;
+        color: white;
+    }
+    #output {
+        padding: 0;
+        & code {
+            color: white;
+        }
+    }
+</style>
