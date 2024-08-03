@@ -103,6 +103,12 @@ class DefFuncCompletions
             comp.push(sni);
         }
         {
+            const sni = new vscode.CompletionItem("description");
+            sni.insertText = new vscode.SnippetString("description{${1}}$");
+            sni.kind = vscode.CompletionItemKind.Function;
+            comp.push(sni);
+        }
+        {
             const sni = new vscode.CompletionItem("title");
             sni.insertText = new vscode.SnippetString("title{${1}}$");
             sni.kind = vscode.CompletionItemKind.Function;
