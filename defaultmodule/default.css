@@ -1,6 +1,7 @@
 .NDDS {
     white-space: break-spaces;
-    
+    padding: 10px;
+
     & div {
         margin: 10px;
         margin-left: 10px;
@@ -20,10 +21,16 @@
     }
 
     & h1, h2, h3, h4, h5, h6 {
-        padding: 3px;
+        padding-top: 4px;
+        padding-bottom: 4px;
+        padding-left: 10px;
+        padding-right: 10px;
         border-radius: 10px;
         background-color: rgba(255, 255, 255, 0.1);
-        margin: 10px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        margin-left: -5px;
+        margim-right: -5px;
     }
 
     & .align-right { text-align: right; }

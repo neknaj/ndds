@@ -71,18 +71,15 @@ function countIndent(ils,ln) {
     return i/4;
 }
 
-import('./runtime/eval.js').then(module => {
-        console.log(module);
-        Runtime = module;
-    }).catch(error => {
-        console.error('Error loading module:', error);
-    });
-import('./defaultmodule/default.js').then(module => {
-        console.log(module);
-        Module.default = module;
-    }).catch(error => {
-        console.error('Error loading module:', error);
-    });
+
+window.onload = async ()=>{
+    {
+        Runtime = await import('./runtime/eval.js');
+        Module.default = await import('./defaultmodule/default.js');
+    }
+    convert();
+}
+
 function fRead(filename) {
     var hr = new XMLHttpRequest();
     hr.open("GET", filename, false);

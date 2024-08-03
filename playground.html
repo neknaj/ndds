@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>NDDS Web Playground</title>
+        <link href="./defaultmodule/default.css" rel="stylesheet">
+        <script src="cdom.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/neknaj/webSplitLayout/type1/layout.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/neknaj/webSplitLayout/type1/layout.css"></head>
+        <script src="https://unpkg.com/monaco-editor@latest/min/vs/loader.js"></script>
+        <meta name="twitter:card" content="summary" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:title" content="NDDS Web Playground" />
+        <meta property="og:title" content="NDDS Web Playground" />
+        <meta name="twitter:Description" content="You can try out NDDS in your browser" />
+        <meta property="og:description" content="You can try out NDDS in your browser" />
+        <meta property="og:site_name" content="Neknaj Project" />
+    </head>
+    <body>
+        <div id="layoutroot"></div>
+    </body>
+</html>
+<script>module={}</script>
+<script src="./parser/lineparser.js"></script>
+<script>const lineparser = module.exports.parse;</script>
+<script>
+
+initlayout(
+    document.querySelector("#layoutroot"),
+    ["h",[3,2],[
+        ["c","editor"],
+        ["c","preview"],
+    ]],
+    {
+        editor: ()=>{return elm("div",{id:"container"},[])},
+        preview: ()=>{return elm("article",{id:"preview",class:["NDDS"]},[])},
+        empty: ()=>{return elm("h1",{},[textelm("empty")])},
+    }
+)
+Array.prototype.last = function(n=1) {
+    return this[this.length-n];
+};
+
+var input;
+var Runtime = {};
+var Module = {};
+
+function convert() {
+    let data = input.getValue()+"\n";
+    preview.innerHTML = "";
+    converter(data,preview);
+}
+
+function converter(input,parent) {
+    let inputlines = input.split("\n");
+    let lastLn = inputlines.length;
+    console.log(lastLn)
+    let nestList = [parent];
+    for (let ln=1;ln<lastLn;ln++) {
+        // line.indentがある場合、nestListにdiv要素を追加する (">>>" )
+        {
+            let newindent = countIndent(inputlines,ln);
+            console.log("indent",newindent)
+            console.log(newindent,nestList.length-1)
+            while (newindent<nestList.length-1) {
+                console.log("decr")
+                nestList.pop();
+            }
+        }
+        let line = lineparser(input,{line:ln,col:(nestList.length-1)*4});
+        console.log(line)
+        if (line.indent==">>> ") { // インデント追加
+            let newelm = elm("div",{class:["nest"]},[]);
+            nestList.last().Add(newelm);
+            nestList.push(newelm);
+        }
+        Runtime.NMLLine(line,Module,nestList.last());
+        if ((line.linebreak&&line.res.length!=0)||(!line.linebreak&&line.res.length==0)) {
+            nestList.last().Add(elm("br",{},[]));
+        }
+    }
+}
+function countIndent(ils,ln) {
+    let i = 0;
+    while (ils[ln-1][i]==" ") {i++;}
+    return i/4;
+}
+require.config({ paths: { 'vs': 'https://unpkg.com/monaco-editor@latest/min/vs' }});
+require(['vs/editor/editor.main'], function() {
+    // カスタム言語の登録
+    monaco.languages.register({ id: 'nml' });
+
+    // Monarchトークンプロバイダーの設定
+    monaco.languages.setMonarchTokensProvider('nml', {
+        tokenizer: {
+            root: [
+                [/\$\$/, 'keyword.control'],
+                [/>>> /, { token: 'keyword', next: '@root' }],
+                [/(!|->)([a-zA-Z_][a-zA-Z0-9_]*)/, ['keyword.control', 'variable.name']],
+                [/\[/, { token: 'keyword.control', next: '@string' }],
+                [/\{/, { token: 'keyword.control', next: '@nml' }],
+                [/\(/, { token: 'keyword.control', next: '@arg' }],
+            ],
+            nml: [
+                [/\{^\\\}]+/, 'keyword.control'],
+                [/\\./, 'string'],
+                [/\}/, { token: 'keyword.control', next: '@pop' }]
+            ],
+            arg: [
+                [/\(^\\\)]+/, 'keyword.control'],
+                [/\"/, { token: 'keyword.control', next: '@doublestring' }],
+                [/[0-9]+(\.[0-9]*)?/, 'constant.numeric'],
+                [/\)/, { token: 'keyword.control', next: '@pop' }]
+            ],
+            string: [
+                [/[^\\\]]+/, 'string'],
+                [/\\./, 'string'],
+                [/\]/, { token: 'keyword.control', next: '@pop' }]
+            ],
+            doublestring: [
+                [/[^\\\"]+/, 'string'],
+                [/\\./, 'string'],
+                [/\"/, { token: 'keyword.control', next: '@pop' }]
+            ],
+        }
+    });
+
+    // エディタの初期化
+    input = monaco.editor.create(document.getElementById('container'), {
+        value: sessionStorage.getItem("nmleditorAutosave")?sessionStorage.getItem("nmleditorAutosave"):fRead("./doc.nml"),
+        language: 'nml',
+        theme: "vs-dark",
+        automaticLayout: true,
+        fontSize: 13,
+    });
+    input.getModel().onDidChangeContent((e)=>{
+        sessionStorage.setItem("nmleditorAutosave", input.getValue());
+        convert();
+    });
+});
+
+window.onload = async ()=>{
+    {
+        Runtime = await import('./runtime/eval.js');
+        Module.default = await import('./defaultmodule/default.js');
+    }
+    convert();
+}
+
+function fRead(filename) {
+    var hr = new XMLHttpRequest();
+    hr.open("GET", filename, false);
+    hr.send(null);
+    if (hr.status == 200 || hr.status == 304) {
+        return hr.responseText.replace(/\r\n/g, "\n");
+    }
+    else {
+        throw "err " + filename;
+    }
+};
+</script>
+<style>
+    :root {
+        color-scheme: dark;
+    }
+    body {
+        margin: 0;
+        padding: 0;
+        height: 100dvh;
+        width: 100dvw;
+        overflow: hidden;
+    }
+    #layoutroot {
+        height: 100%;
+        width: 100%;
+    }
+    #container {
+        height: 100%;
+        width: 100%;
+    }
+    #preview {
+        height: 100%;
+        overflow: scroll;
+    }
+</style>

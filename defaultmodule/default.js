@@ -2,7 +2,7 @@ import { elm, textelm } from '../cdom_module.js';
 
 export function doctitle(title) {
     console.log(title)
-    document.getElementsByTagName("title")[0].innerHTML = title.innerText;
+    document.getElementsByTagName("title")[0].innerHTML = gettext(title);
     return elm("h1",{},title[0]);
 }
 
