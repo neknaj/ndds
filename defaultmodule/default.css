@@ -1,6 +1,6 @@
 .NDDS {
     white-space: break-spaces;
-    padding: 10px;
+    padding: 20px;
 
     & div {
         margin: 10px;
@@ -26,11 +26,16 @@
         padding-left: 10px;
         padding-right: 10px;
         border-radius: 10px;
-        background-color: rgba(255, 255, 255, 0.1);
-        margin-top: 5px;
-        margin-bottom: 5px;
+        background-color: rgba(255, 255, 255, 0.07);
+        margin-top: 10px;
+        margin-bottom: 10px;
         margin-left: -5px;
         margim-right: -5px;
+    }
+
+    & .doctitle {
+        background-color: rgba(255, 255, 255, 0.07);
+        font-size: 190%;
     }
 
     & .align-right { text-align: right; }

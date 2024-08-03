@@ -59,6 +59,7 @@ function converter(input,parent) {
             nestList.last().Add(newelm);
             nestList.push(newelm);
         }
+        Runtime.Indent = nestList.length-1;
         Runtime.NMLLine(line,Module,nestList.last());
         if ((line.linebreak&&line.res.length!=0)||(!line.linebreak&&line.res.length==0)) {
             nestList.last().Add(elm("br",{},[]));

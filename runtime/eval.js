@@ -11,6 +11,11 @@ export function NMLLine(obj,module,parent) {
     }
 }
 
+export let Indent = 0;
+export function setIndent(n) {
+    Indent = n;
+}
+
 function NML(obj,parent) {
     for (let i of obj) {
         if (i.type=="NMLText") {
