@@ -4,16 +4,14 @@
     "author": "Bem130 <bem130@ymail.ne.jp> (https://github.com/bem130)",
     "displayName": "NDDS Supports",
     "description": "NDDS Supports - Syntax Highlight, Preview, Snippet for VSCode",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "engines": {
         "vscode": "^1.91.0"
     },
     "categories": [
         "Programming Languages"
     ],
-    "activationEvents": [
-        "onCommand:extension.showPreview"
-    ],
+    "activationEvents": [],
     "main": "./extension.js",
     "contributes": {
         "languages": [{
@@ -28,7 +26,7 @@
             "path": "./syntaxes/nml.tmLanguage.json"
         }],
         "commands": [{
-            "command": "extension.showPreview",
+            "command": "nddssupports.showPreview",
             "title": "show NDDS Preview"
         }]
     },

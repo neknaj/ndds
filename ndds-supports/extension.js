@@ -13,31 +13,54 @@ const fs = require('fs');
 function activate(context) {
     outputChannel = vscode.window.createOutputChannel("NDDS Supports");
     outputChannel.appendLine('NDDS Extension activated');
-    const disposable = vscode.commands.registerCommand('extension.showPreview', () => { // プレビューウインドウ
-        const panel = vscode.window.createWebviewPanel(
-            'preview',
-            'Preview',
-            vscode.ViewColumn.Beside,
-            {
-                enableScripts: true,
-				localResourceRoots: [vscode.Uri.file(path.join(context.extensionPath, 'media')),vscode.workspace.workspaceFolders[0].uri]
+    { // プレビューウインドウを開くボタン
+        let PreviewBtn = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 10000);
+        PreviewBtn.text = "NDDS Preview";
+        PreviewBtn.tooltip = "Open NDDS Preview";
+        PreviewBtn.command = "nddssupports.showPreview";
+        context.subscriptions.push(PreviewBtn);
+        function updateButtonVisibility() {
+            const editor = vscode.window.activeTextEditor;
+            if (editor && editor.document.languageId === 'nml') {
+                PreviewBtn.show();
+            } else {
+                PreviewBtn.hide();
             }
+        }
+        updateButtonVisibility();
+        context.subscriptions.push(
+            vscode.window.onDidChangeActiveTextEditor(updateButtonVisibility)
         );
+    }
+    { // プレビューウインドウ
+        const disposable = vscode.commands.registerCommand('nddssupports.showPreview', () => {
+            const panel = vscode.window.createWebviewPanel(
+                'preview-'+vscode.window.activeTextEditor.document.uri.fsPath,
+                'Preview '+path.basename(vscode.window.activeTextEditor.document.uri.fsPath),
+                vscode.ViewColumn.Beside,
+                {
+                    enableScripts: true,
+                    localResourceRoots: [vscode.Uri.file(path.join(context.extensionPath, 'media')),vscode.workspace.workspaceFolders[0].uri]
+                }
+            );
 
-        updateContent(panel, context);
+            updateContent(panel, context);
 
-        vscode.workspace.onDidChangeTextDocument(event => {
-            if (event.document === vscode.window.activeTextEditor?.document) {
-                updateContent(panel, context);
-            }
+            vscode.workspace.onDidChangeTextDocument(event => {
+                if (event.document === vscode.window.activeTextEditor?.document) {
+                    updateContent(panel, context);
+                }
+            });
         });
-    });
-    const defFuncProvider = vscode.languages.registerCompletionItemProvider('nml', new DefFuncCompletions(),"!"); // 関数補完
-    const IndentProvider = vscode.languages.registerCompletionItemProvider('nml', new IndentCompletions()); // インデントマーカー補完
+        context.subscriptions.push(disposable);
+    }
+    { // 補完機能
+        const defFuncProvider = vscode.languages.registerCompletionItemProvider('nml', new DefFuncCompletions(),"!"); // 関数補完
+        const IndentProvider = vscode.languages.registerCompletionItemProvider('nml', new IndentCompletions()); // インデントマーカー補完
 
-    context.subscriptions.push(disposable);
-    context.subscriptions.push(defFuncProvider);
-    context.subscriptions.push(IndentProvider);
+        context.subscriptions.push(defFuncProvider);
+        context.subscriptions.push(IndentProvider);
+    }
 }
 
 function updateContent(panel, context) {

@@ -206,7 +206,7 @@ function peg$parse(input, options) {
       peg$c62 = peg$literalExpectation("\\", false),
       peg$c63 = /^[^\\n]/,
       peg$c64 = peg$classExpectation(["\\", "n"], true, false),
-      peg$c65 = function(char) { return char; },
+      peg$c65 = function(char) { return "\\"+char; },
 
       peg$currPos          = 0,
       peg$savedPos         = 0,

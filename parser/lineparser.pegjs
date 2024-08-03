@@ -42,4 +42,4 @@ numberArg = chars:([0-9_]/".")+ { return Number(chars.join("")); }
 TXTArg = chars:("\\\\" / EscapedChar / [^\n\]])* { return unescapeString(chars.join("")); }
 NMLArg = texttarget
 
-EscapedChar = "\\" char:[^\\n] { return char; }
+EscapedChar = "\\" char:[^\\n] { return "\\"+char; }
