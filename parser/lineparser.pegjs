@@ -9,9 +9,6 @@
     function skipChars(m) {
         peg$currPos = Math.min(peg$currPos + m, input.length);
     }
-    function unescapeString(str) {
-        return str.replace(/\\(.)/g, "$1");
-    }
     let loc = location;
 }
 
@@ -21,7 +18,7 @@ target = indent:(">>> "/"") res:texttarget linebreak:("$"/"") "\n" { return {ind
 
 texttarget = ((f:InlineFuncCall c:ChainFuncCall* {return {type:"InlineFuncCallSet",func:f,chain:c}})/nmltext)*
 
-nmltext = chars:(EscapedChar / [^\\\n!\}$])+ { return {type:"NMLText",text:unescapeString(chars.join(""))}; }
+nmltext = chars:(EscapedChar / [^\\\n!\}\$])+ { return {type:"NMLText",text:chars.join("")}; }
 
 
 InlineFuncCall = "!" name:FuncName
@@ -37,9 +34,9 @@ ChainFuncCall = "->" name:FuncName normalargs:(("(" arg:NormalArg ")" {return ar
 FuncName = a:([a-zA-Z_]) b:([a-zA-Z0-9_])* { return a+b.join(""); }
 
 NormalArg = (a:(InlineFuncCall/textArg/numberArg) b:("|" c:(InlineFuncCall/textArg/numberArg) {return c})* {return [a].concat(b)})/("" {return []})
-textArg = "\"" chars:(EscapedChar / [^\\\n\"])* "\"" { return unescapeString(chars.join("")); }
+textArg = "\"" chars:(EscapedChar / [^\\\n\"])* "\"" { return chars.join(""); }
 numberArg = chars:([0-9_]/".")+ { return Number(chars.join("")); }
-TXTArg = chars:("\\\\" / EscapedChar / [^\n\]])* { return unescapeString(chars.join("")); }
+TXTArg = chars:(EscapedChar / [^\n\]])* { return chars.join(""); }
 NMLArg = texttarget
 
-EscapedChar = "\\" char:[^\\n] { return "\\"+char; }
+EscapedChar = "\\" char:(.) { return char; }
