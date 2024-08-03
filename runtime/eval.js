@@ -1,3 +1,5 @@
+// for Client Side ( Web Browser )
+
 import { elm, textelm } from '../cdom_module.js';
 var Module = {};
 
@@ -15,7 +17,10 @@ function NML(obj,parent) {
             parent.push(NMLText(i));
         }
         if (i.type=="InlineFuncCallSet") {
-            parent.push(InlineFuncCallSet(i));
+            let res = InlineFuncCallSet(i);
+            if (res instanceof HTMLElement) {
+                parent.push(res);
+            }
         }
     }
     return parent;
@@ -26,16 +31,30 @@ function NMLText(obj) {
 }
 
 function InlineFuncCallSet(obj) {
-    console.log(obj)
     let res = null;
+    let error = false;
     { // func
         let blockargs = InlineFuncCall_BlockArgs(obj.func.blockargs);
         let args = [blockargs].concat(obj.func.normalargs);
-        res = Module.default[obj.func.name](...args);
+        if (Module.default[obj.func.name]==null) {
+            error = true;
+            res = Module.default.undefinedfunc(obj.func.name);
+        }
+        else {
+            res = Module.default[obj.func.name](...args);
+        }
     }
-    for (let i of obj.chain) {
-        console.log(i)
-        res = Module.default[i.name](...[res].concat(i.args));
+    if (!error) { // chain
+        for (let i of obj.chain) {
+            if (Module.default[i.name]==null) {
+                error = true;
+                res = Module.default.undefinedfunc(i.name);
+                break;
+            }
+            else {
+                res = Module.default[i.name](...[res].concat(i.args));
+            }
+        }
     }
     return res;
 }

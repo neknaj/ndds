@@ -1,5 +1,7 @@
 !doctitle{Neknaj Document Description System}->align("center")$
 
+!description[NDDSの仕様について纏めてあります]
+
 >>> !title{空白}$
     空白は基本的にnmlテキストに記述された通りに表示されます
 >>> !title{改行}$

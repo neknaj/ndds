@@ -15,13 +15,25 @@ export function text(title) {
 }
 
 export function code(code) {
-    return elm("code",{},[textelm(code[0].map((x)=>{return x.innerText}).join(""))]);
+    return elm("code",{},[textelm(gettext(code))]);
 }
 
 export function note(message,type="") {
-    return elm("div",{class:["note"]},message[0]);
+    return elm("div",{class:["note",type]},message[0]);
 }
 
 export function align(dom,prop) {
     return dom.addClass("align-"+prop);
+}
+
+export function description(title) {
+    return;
+}
+
+export function undefinedfunc(name) {
+    return elm("div",{class:["note","error","undefinedfunc"]},[textelm("Function "), elm("code",{},[textelm(name)]), textelm(" is undefined")]);
+}
+
+function gettext(e) {
+    return e[0].map((x)=>{return x.innerText}).join("")
 }

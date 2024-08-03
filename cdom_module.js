@@ -7,7 +7,12 @@ export function elm(type, prop, children) {
                 elm.dataset[k] = prop[key][k];
             }
         } else {
-            elm.setAttribute(key, prop[key]);
+            if (key=="class"&&(prop)[key] instanceof Array) {
+                elm.setAttribute(key, prop[key].join(" "));
+            }
+            else {
+                elm.setAttribute(key, prop[key]);
+            }
         }
     }
     for (const child of children) {
