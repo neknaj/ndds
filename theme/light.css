@@ -1,0 +1,18 @@
+.light-theme {
+    --color-scheme: light;
+    --icon-color: hsl(0, 0%, 0%);
+    --background-color: hsl(240, 18%, 96%);
+    --text-color: hsl(210, 22%, 24%);
+    --title-text-color: hsl(210, 22%, 24%);
+    --code-text-color: hsl(165, 100%, 18%);
+    --link-color: hsl(210, 100%, 36%);
+    --nest-bar-color: hsl(226, 89%, 44%);
+    --title-background-color: hsl(0, 0%, 100%);
+    --doctitle-background-color: hsl(0, 0%, 100%);
+    --note-type-background-color: hsla(0, 0%, 0%, 0.1);
+    --note-background-color: hsla(117, 50%, 76%, 0.6);
+    --note-error-background-color: hsla(0, 50%, 76%, 0.6);
+    --code-background-color: hsla(240, 5%, 85%, 0.8);
+    --title-accent-left-color: hsl(255, 100%, 15%);
+    --title-accent-right-color: hsl(200, 70%, 63%);
+}

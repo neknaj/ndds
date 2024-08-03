@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark-theme">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>NDDS Web Playground</title>
         <link href="./defaultmodule/default.css" rel="stylesheet">
+        <script src="cookie.js"></script>
         <script src="cdom.js"></script>
         <script src="https://cdn.jsdelivr.net/gh/neknaj/webSplitLayout/type1/layout.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/neknaj/webSplitLayout/type1/layout.css"></head>
@@ -16,12 +17,15 @@
         <meta name="twitter:Description" content="You can try out NDDS in your browser" />
         <meta property="og:description" content="You can try out NDDS in your browser" />
         <meta property="og:site_name" content="Neknaj Project" />
+        <link href="./theme/dark.css" rel="stylesheet">
+        <link href="./theme/light.css" rel="stylesheet">
     </head>
     <body>
         <header>
             <nav>
                 <a href="https://neknaj.com/">Neknaj Project</a>
                 <div class="pageheader_right">
+                    <button onclick="toggleTheme()">Toggle Theme</button>
                     <button onclick="copynml()">Copy NML</button>
                     <button onclick="copyhtml()">Copy HTML</button>
                 </div>
@@ -160,6 +164,19 @@ function copynml() {
 
 window.onload = async ()=>{
     {
+        var theme = getCookie('theme');
+        const elm = document.getElementsByTagName("html")[0];
+        if (theme === 'light') {
+            elm.classList.add('light-theme');
+            elm.classList.remove('dark-theme');
+            monaco.editor.setTheme("vs-light");
+        } else {
+            elm.classList.add('dark-theme');
+            elm.classList.remove('light-theme');
+            monaco.editor.setTheme("vs-dark");
+        }
+    }
+    {
         Runtime = await import('./runtime/eval.js');
         Module.default = await import('./defaultmodule/default.js');
     }
@@ -177,27 +194,49 @@ function fRead(filename) {
         throw "err " + filename;
     }
 };
+
+function toggleTheme() {
+    const elm = document.getElementsByTagName("html")[0];
+    elm.classList.toggle('light-theme');
+    if (elm.classList.contains('light-theme')) {
+        monaco.editor.setTheme("vs-light");
+        elm.classList.remove('dark-theme');
+        setCookie('theme', 'light', 7);
+    } else {
+        monaco.editor.setTheme("vs-dark");
+        elm.classList.add('dark-theme');
+        setCookie('theme', 'dark', 7);
+    }
+}
+
 </script>
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200..900&display=swap');
     :root {
-        color-scheme: dark;
+        color-scheme: var(--color-scheme);
     }
     body {
+        background-color: var(--playground-background-color);
         margin: 0;
         padding: 0;
         height: 100dvh;
         width: 100dvw;
         overflow: hidden;
+        font-family: "Noto Serif JP", serif;
+        font-optical-sizing: auto;
+        font-weight: 200;
+        font-style: normal;
     }
     header {
+        background-color: var(--playground-header-color);
         font-size: 20px;
-        height: 25px;
+        height: 27px;
         padding: 5px;
         display: block;
         position: sticky;
         top: 0;
         & a {
-            color: white;
+            color: var(--icon-color);
             padding-left: 5px;
             padding-right: 5px;
             text-decoration: none;
@@ -209,7 +248,7 @@ function fRead(filename) {
         }
     }
     #layoutroot {
-        height: calc(100% - 35px);
+        height: calc(100% - 37px);
         width: 100%;
     }
     #container {
@@ -217,7 +256,17 @@ function fRead(filename) {
         width: 100%;
     }
     #preview {
-        max-height: 100%;
+        height: calc(100% - 40px);
         overflow: scroll;
     }
+</style>
+<style>
+.dark-theme {
+    --playground-background-color: rgb(23, 18, 0);
+    --playground-header-color: hsl(201, 92%, 10%);
+}
+.light-theme {
+    --playground-background-color: rgb(229, 229, 233);
+    --playground-header-color: hsl(201, 24%, 76%);
+}
 </style>

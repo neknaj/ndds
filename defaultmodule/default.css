@@ -1,32 +1,38 @@
 .NDDS {
     white-space: break-spaces;
     padding: 20px;
+    background-color: var(--background-color);
+    color: var(--text-color);
 
     & div {
         margin: 10px;
         margin-left: 10px;
         padding: 5px;
-        border-radius: 10px;
+        border-radius: 5px;
     }
 
     & div.nest {
         padding-left: 15px;
-        border-left: 1px solid rgba(255, 255, 255, 0.3);
+        border-left: 1px solid var(--nest-bar-color);
     }
 
     & code {
-        background-color: rgb(32, 32, 37);
+        color: var(--code-text-color);
+        background-color: var(--code-background-color);
         border-radius: 5px;
         padding: 3px;
     }
 
     & h1, h2, h3, h4, h5, h6 {
+        color: var(--title-text-color);
         padding-top: 4px;
         padding-bottom: 4px;
-        padding-left: 10px;
-        padding-right: 10px;
-        border-radius: 10px;
-        background-color: rgba(255, 255, 255, 0.07);
+        padding-left: 15px;
+        padding-right: 15px;
+        border-radius: 4px;
+        background-color: var(--title-background-color);
+        border-left: 5px solid var(--title-accent-left-color);
+        border-bottom: 2px solid var(--title-accent-right-color);
         margin-top: 10px;
         margin-bottom: 10px;
         margin-left: -5px;
@@ -34,8 +40,10 @@
     }
 
     & .doctitle {
-        background-color: rgba(255, 255, 255, 0.07);
+        background-color: var(--doctitle-background-color);
         font-size: 190%;
+        padding-top: 8px;
+        padding-bottom: 8px;
     }
 
     & .align-right { text-align: right; }
@@ -44,10 +52,22 @@
     & .align-justify { text-align: justify; }
 
     & div.note {
-        background-color: rgba(177, 255, 174, 0.15);
+        background-color: var(--note-background-color);
         width: fit-content;
-    }
-    & div.note.error {
-        background-color: rgba(255, 8, 0, 0.3);
+        &::before {
+            content: "note";
+            background-color: var(--note-type-background-color);
+            border-radius: 7px;
+            font-size: 80%;
+            padding-left: 5px;
+            padding-right: 5px;
+            margin-right: 7px;
+        }
+        &.error {
+            background-color: var(--note-error-background-color);
+            &::before {
+                content: "error";
+            }
+        }
     }
 }
