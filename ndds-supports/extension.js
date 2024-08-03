@@ -76,7 +76,7 @@ function getWebviewContent(content, webview, context) {
     const htmlPath = path.join(context.extensionPath, "./preview.html");
     try {
         let html = fs.readFileSync(htmlPath, 'utf-8');
-        html = html.replace('${content}', content);
+        html = html.replace('${content}', content.replaceAll("\\","\\\\"));
         return html;
     } catch (error) {
         console.error(`Failed to read HTML template: ${error}`);

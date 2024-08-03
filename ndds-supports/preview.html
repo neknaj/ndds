@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NDDS Preview</title>
-    <link href="https://cdn.jsdelivr.net/gh/neknaj/ndds@2f5d8fe/defaultmodule/default.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/gh/neknaj/ndds@2f5d8fe/cdom.js"></script>
+    <link href="https://cdn.jsdelivr.net/gh/neknaj/ndds@89e45aa/defaultmodule/default.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/gh/neknaj/ndds@89e45aa/cdom.js"></script>
 </head>
 <body>
     <div id="output" class="NDDS"></div>
 </body>
 </html>
 <script>module={}</script>
-<script src="https://cdn.jsdelivr.net/gh/neknaj/ndds@2f5d8fe/parser/lineparser.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/neknaj/ndds@89e45aa/parser/lineparser.js"></script>
 <script>const lineparser = module.exports.parse;</script>
 <script>
 
@@ -20,7 +20,8 @@ Array.prototype.last = function(n=1) {
     return this[this.length-n];
 };
 
-let input = `${content}\n`
+let input = `${content}`
+console.log(input)
 
 var Runtime = {};
 var Module = {};
@@ -67,8 +68,8 @@ function countIndent(ils,ln) {
 
 window.onload = async ()=>{
     {
-        Runtime = await import('https://cdn.jsdelivr.net/gh/neknaj/ndds@2f5d8fe/runtime/eval.js');
-        Module.default = await import('https://cdn.jsdelivr.net/gh/neknaj/ndds@2f5d8fe/defaultmodule/default.js');
+        Runtime = await import('https://cdn.jsdelivr.net/gh/neknaj/ndds@89e45aa/runtime/eval.js');
+        Module.default = await import('https://cdn.jsdelivr.net/gh/neknaj/ndds@89e45aa/defaultmodule/default.js');
     }
     convert();
 }
