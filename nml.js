@@ -52,7 +52,7 @@ var NML_Runtime = {};
 var NML_Module = {};
 
 window.addEventListener("load",async ()=>{
-    NML_Runtime = await import('/runtime/eval.js');
-    NML_Module.default = await import('/defaultmodule/default.js');
+    NML_Runtime = await import('./runtime/eval.js');
+    NML_Module.default = await import('/.defaultmodule/default.js');
     customElements.define("nml-view", NeknajMarkupLanguageElement);
 })
