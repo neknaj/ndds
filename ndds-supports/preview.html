@@ -4,37 +4,12 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>NDDS View</title>
-        <script src="./ndds/nml.js"></script>
-        <link href="./ndds/theme/dark.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/gh/neknaj/ndds@af19cb8/nml.js"></script>
+        <link href="https://cdn.jsdelivr.net/gh/neknaj/ndds@af19cb8/theme/dark.css" rel="stylesheet">
     </head>
 <body>
 <nml-view>
-!doctitle{!defabbr("Neknaj Document Description System"){NDDS}}->align("center")$
-
-!img("https://img.shields.io/badge/-Javascript-7f5a28.svg?logo=javascript") $
-!img("https://img.shields.io/badge/-Node.js-335913.svg?logo=node.js") $
-!img("https://img.shields.io/badge/-VSCode-2062cf.svg") $
-
->>> !title{概要}$
-    これはBem130が作っているマークアップ言語と、それをWebブラウザで表示するためのツールです
-    マークアップ言語の名前は!defabbr("Neknaj Markup Language"){NML}です
-
->>> !title{特徴}$
-    インデントによって入れ子構造を表現します
-    別ファイルで定義したJavaScriptの関数を呼び出せます
-
->>> !title{動作}$
-    基本的には全てブラウザで動きます
-    WebサーバーからはNMLで書かれたドキュメントと、それをHTMLに変換する為のツールが送られます
-
->>> !title{構成}$
-    >>> !title{VSCode拡張機能}$
-        VSCodeの拡張機能として、NMLのシンタックスハイライトとコード補完、プレビューを提供します
-        !link("https://github.com/neknaj/ndds/releases"){Releases}
-    >>> !title{プレイグラウンド}$
-        ブラウザ上でコードを書いてリアルタイムにプレビューを見ることができます
-        シンタックスハイライトも使えます
-        !link("https://neknaj.github.io/ndds/playground.html"){playground.html}
+${content}
 </nml-view>
 </body>
 </html>
@@ -44,6 +19,8 @@
         font-family: serif;
     }
     nml-view {
+        color: rgba(0, 0, 0, 0);
+        font-family: serif;
         display: block;
         position: absolute;
         top: 0;

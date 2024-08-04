@@ -121,8 +121,44 @@ class DefFuncCompletions
             comp.push(sni);
         }
         {
+            const sni = new vscode.CompletionItem("img");
+            sni.insertText = new vscode.SnippetString("img(\"${1}\")");
+            sni.kind = vscode.CompletionItemKind.Function;
+            comp.push(sni);
+        }
+        {
+            const sni = new vscode.CompletionItem("image");
+            sni.insertText = new vscode.SnippetString("img(\"${1}\")");
+            sni.kind = vscode.CompletionItemKind.Function;
+            comp.push(sni);
+        }
+        {
             const sni = new vscode.CompletionItem("note");
-            sni.insertText = new vscode.SnippetString("note{${1}}");
+            sni.insertText = new vscode.SnippetString("note{${1}}$");
+            sni.kind = vscode.CompletionItemKind.Function;
+            comp.push(sni);
+        }
+        {
+            const sni = new vscode.CompletionItem("link");
+            sni.insertText = new vscode.SnippetString("link(\"${1}\"){${2}}");
+            sni.kind = vscode.CompletionItemKind.Function;
+            comp.push(sni);
+        }
+        {
+            const sni = new vscode.CompletionItem("abbr");
+            sni.insertText = new vscode.SnippetString("abbr{${1}}");
+            sni.kind = vscode.CompletionItemKind.Function;
+            comp.push(sni);
+        }
+        {
+            const sni = new vscode.CompletionItem("dfn");
+            sni.insertText = new vscode.SnippetString("dfn(\"${1}\"){${2}}");
+            sni.kind = vscode.CompletionItemKind.Function;
+            comp.push(sni);
+        }
+        {
+            const sni = new vscode.CompletionItem("defabbr");
+            sni.insertText = new vscode.SnippetString("defabbr(\"${1}\"){${2}}");
             sni.kind = vscode.CompletionItemKind.Function;
             comp.push(sni);
         }
