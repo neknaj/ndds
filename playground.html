@@ -4,9 +4,8 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>NDDS Web Playground</title>
-        <link href="./defaultmodule/default.css" rel="stylesheet">
         <script src="cookie.js"></script>
-        <script src="cdom.js"></script>
+        <script src="/cdom.js"></script>
         <script src="https://cdn.jsdelivr.net/gh/neknaj/webSplitLayout/type1/layout.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/neknaj/webSplitLayout/type1/layout.css"></head>
         <script src="https://unpkg.com/monaco-editor@latest/min/vs/loader.js"></script>
@@ -17,6 +16,7 @@
         <meta name="twitter:Description" content="You can try out NDDS in your browser" />
         <meta property="og:description" content="You can try out NDDS in your browser" />
         <meta property="og:site_name" content="Neknaj Project" />
+        <script src="/nml.js"></script>
         <link href="./theme/dark.css" rel="stylesheet">
         <link href="./theme/light.css" rel="stylesheet">
     </head>
@@ -34,9 +34,6 @@
         <div id="layoutroot"></div>
     </body>
 </html>
-<script>module={}</script>
-<script src="./parser/lineparser.js"></script>
-<script>const lineparser = module.exports.parse;</script>
 <script>
 
 initlayout(
@@ -47,7 +44,7 @@ initlayout(
     ]],
     {
         editor: ()=>{return elm("div",{id:"container"},[])},
-        preview: ()=>{return elm("article",{id:"preview",class:["NDDS"]},[])},
+        preview: ()=>{return elm("nml-view",{id:"preview",class:["NDDS"]},[])},
         empty: ()=>{return elm("h1",{},[textelm("empty")])},
     }
 )
@@ -55,52 +52,6 @@ Array.prototype.last = function(n=1) {
     return this[this.length-n];
 };
 
-var input;
-var Runtime = {};
-var Module = {};
-
-function convert() {
-    let data = input.getValue()+"\n";
-    preview.innerHTML = "";
-    converter(data,preview);
-}
-
-function converter(input,parent) {
-    let inputlines = input.split("\n");
-    let lastLn = inputlines.length;
-    console.log(lastLn)
-    let nestList = [parent];
-    for (let ln=1;ln<lastLn;ln++) {
-        // line.indentがある場合、nestListにdiv要素を追加する (">>>" )
-        {
-            let newindent = countIndent(inputlines,ln);
-            console.log("indent",newindent)
-            console.log(newindent,nestList.length-1)
-            while (newindent<nestList.length-1) {
-                console.log("decr")
-                nestList.pop();
-            }
-        }
-        let line = lineparser(input,{line:ln,col:(nestList.length-1)*4});
-        console.log(line)
-        if (line.indent==">>> ") { // インデント追加
-            let newelm = elm("div",{class:["nest"]},[]);
-            nestList.last().Add(newelm);
-            nestList.push(newelm);
-        }
-        Runtime.setIndent(nestList.length-1)
-        Runtime.NMLLine(line,Module,nestList.last());
-        if ((line.linebreak&&line.res.length!=0)||(!line.linebreak&&line.res.length==0)) {
-            nestList.last().Add(elm("br",{},[]));
-        }
-    }
-}
-
-function countIndent(ils,ln) {
-    let i = 0;
-    while (ils[ln-1][i]==" ") {i++;}
-    return i/4;
-}
 require.config({ paths: { 'vs': 'https://unpkg.com/monaco-editor@latest/min/vs' }});
 require(['vs/editor/editor.main'], function() {
     // カスタム言語の登録
@@ -151,7 +102,8 @@ require(['vs/editor/editor.main'], function() {
     });
     input.getModel().onDidChangeContent((e)=>{
         sessionStorage.setItem("nmleditorAutosave", input.getValue());
-        convert();
+        preview.innerHTML = input.getValue();
+        preview.update();
     });
 });
 
@@ -177,10 +129,9 @@ window.onload = async ()=>{
         }
     }
     {
-        Runtime = await import('./runtime/eval.js');
-        Module.default = await import('./defaultmodule/default.js');
+        preview.innerHTML = input.getValue();
+        preview.update();
     }
-    convert();
 }
 
 function fRead(filename) {

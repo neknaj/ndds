@@ -1,13 +1,12 @@
 import { elm, textelm } from '../cdom_module.js';
 
 export function doctitle(title) {
-    console.log(title)
     document.getElementsByTagName("title")[0].innerHTML = gettext(title[0]);
     return elm("h1",{class:["doctitle"]},title[0]);
 }
 
 export function title(title) {
-    return elm(`h${Runtime.Indent<6?Runtime.Indent+1:6}`,{},title[0]);
+    return elm(`h${this.Indent<6?this.Indent+1:6}`,{},title[0]);
 }
 
 export function text(title) {

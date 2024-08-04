@@ -12,7 +12,7 @@ function peg$subclass(child, parent) {
   child.prototype = new ctor();
 }
 
-function peg$SyntaxError(message, expected, found, location) {
+export function peg$SyntaxError(message, expected, found, location) {
   this.message  = message;
   this.expected = expected;
   this.found    = found;
@@ -133,7 +133,7 @@ peg$SyntaxError.buildMessage = function(expected, found) {
   return "Expected " + describeExpected(expected) + " but " + describeFound(found) + " found.";
 };
 
-function peg$parse(input, options) {
+export function peg$parse(input, options) {
   options = options !== void 0 ? options : {};
 
   var peg$FAILED = {},
@@ -1219,7 +1219,7 @@ function peg$parse(input, options) {
   }
 }
 
-module.exports = {
-  SyntaxError: peg$SyntaxError,
-  parse:       peg$parse
-};
+// module.exports = {
+//   SyntaxError: peg$SyntaxError,
+//   parse:       peg$parse
+// };

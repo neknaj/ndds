@@ -1,4 +1,6 @@
 .NDDS {
+    height: calc(100% - 40px);
+    overflow-y: scroll;
     white-space: break-spaces;
     padding: 20px;
     background-color: var(--background-color);
