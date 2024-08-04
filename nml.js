@@ -11,7 +11,7 @@ class NeknajMarkupLanguageElement extends HTMLElement {
 
         const styleLink = document.createElement('link');
         styleLink.setAttribute('rel', 'stylesheet');
-        styleLink.setAttribute('href', '/defaultmodule/default.css');
+        styleLink.setAttribute('href', currentScriptDir+'/defaultmodule/default.css');
         shadow.appendChild(styleLink);
 
         // MutationObserverの設定
@@ -46,6 +46,8 @@ class NeknajMarkupLanguageElement extends HTMLElement {
     }
 }
 
+const currentScript = document.currentScript;
+const currentScriptDir = currentScript.src.split("/").slice(0,-1).join("/");
 
 
 var NML_Runtime = {};

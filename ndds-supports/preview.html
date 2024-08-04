@@ -1,95 +1,55 @@
 <!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NDDS Preview</title>
-    <link href="https://cdn.jsdelivr.net/gh/neknaj/ndds@8e7a37d/defaultmodule/default.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/gh/neknaj/ndds@8e7a37d/cdom.js"></script>
-</head>
+<html class="dark-theme">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>NDDS View</title>
+        <script src="./ndds/nml.js"></script>
+        <link href="./ndds/theme/dark.css" rel="stylesheet">
+    </head>
 <body>
-    <div id="output" class="NDDS"></div>
+<nml-view>
+!doctitle{!defabbr("Neknaj Document Description System"){NDDS}}->align("center")$
+
+!img("https://img.shields.io/badge/-Javascript-7f5a28.svg?logo=javascript") $
+!img("https://img.shields.io/badge/-Node.js-335913.svg?logo=node.js") $
+!img("https://img.shields.io/badge/-VSCode-2062cf.svg") $
+
+>>> !title{概要}$
+    これはBem130が作っているマークアップ言語と、それをWebブラウザで表示するためのツールです
+    マークアップ言語の名前は!defabbr("Neknaj Markup Language"){NML}です
+
+>>> !title{特徴}$
+    インデントによって入れ子構造を表現します
+    別ファイルで定義したJavaScriptの関数を呼び出せます
+
+>>> !title{動作}$
+    基本的には全てブラウザで動きます
+    WebサーバーからはNMLで書かれたドキュメントと、それをHTMLに変換する為のツールが送られます
+
+>>> !title{構成}$
+    >>> !title{VSCode拡張機能}$
+        VSCodeの拡張機能として、NMLのシンタックスハイライトとコード補完、プレビューを提供します
+        !link("https://github.com/neknaj/ndds/releases"){Releases}
+    >>> !title{プレイグラウンド}$
+        ブラウザ上でコードを書いてリアルタイムにプレビューを見ることができます
+        シンタックスハイライトも使えます
+        !link("https://neknaj.github.io/ndds/playground.html"){playground.html}
+</nml-view>
 </body>
 </html>
-<script>module={}</script>
-<script src="https://cdn.jsdelivr.net/gh/neknaj/ndds@8e7a37d/parser/lineparser.js"></script>
-<script>const lineparser = module.exports.parse;</script>
-<script>
-
-Array.prototype.last = function(n=1) {
-    return this[this.length-n];
-};
-
-let input = `${content}`
-console.log(input)
-
-var Runtime = {};
-var Module = {};
-
-function convert() {
-    output.innerHTML = "";
-    converter(input,output);
-}
-
-function converter(input,parent) {
-    let inputlines = input.split("\n");
-    let lastLn = inputlines.length;
-    console.log(lastLn)
-    let nestList = [parent];
-    for (let ln=1;ln<lastLn;ln++) {
-        // line.indentがある場合、nestListにdiv要素を追加する (">>>" )
-        {
-            let newindent = countIndent(inputlines,ln);
-            console.log("indent",newindent)
-            console.log(newindent,nestList.length-1)
-            while (newindent<nestList.length-1) {
-                console.log("decr")
-                nestList.pop();
-            }
-        }
-        let line = lineparser(input,{line:ln,col:(nestList.length-1)*4});
-        console.log(line)
-        if (line.indent==">>> ") { // インデント追加
-            let newelm = elm("div",{class:["nest"]},[]);
-            nestList.last().Add(newelm);
-            nestList.push(newelm);
-        }
-        Runtime.NMLLine(line,Module,nestList.last());
-        if ((line.linebreak&&line.res.length!=0)||(!line.linebreak&&line.res.length==0)) {
-            nestList.last().Add(elm("br",{},[]));
-        }
-    }
-}
-function countIndent(ils,ln) {
-    let i = 0;
-    while (ils[ln-1][i]==" ") {i++;}
-    return i/4;
-}
-
-window.onload = async ()=>{
-    {
-        Runtime = await import('https://cdn.jsdelivr.net/gh/neknaj/ndds@8e7a37d/runtime/eval.js');
-        Module.default = await import('https://cdn.jsdelivr.net/gh/neknaj/ndds@8e7a37d/defaultmodule/default.js');
-    }
-    convert();
-}
-</script>
 <style>
     :root {
-        color-scheme: dark;
-    }
-    body {
+        color-scheme: var(--color-scheme);
         font-family: serif;
-        max-width: 1500px;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: black;
-        color: white;
     }
-    #output {
-        padding: 0;
-        & code {
-            color: white;
-        }
+    nml-view {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100dvw;
+        height: 100dvh;
+        white-space : pre;
     }
 </style>
