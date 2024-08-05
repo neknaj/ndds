@@ -1,19 +1,18 @@
 // for Server Side ( Provide information such as meta tags )
 
-const lineparser = require('../parser/lineparser.js').parse;
+const lineparser = require('../parser/lineparser.n.js').parse;
 const fs = require('fs');
 
-console.log(process.argv[2]);
 let data = fs.readFileSync(process.argv[2],"utf-8").replaceAll("\r\n","\n")+"\n";
-console.log(data);
 
 const info = {
     "title": "no title",
-    "desciption": "",
+    "description": "",
 }
 
 converter(data);
 
+console.log(JSON.stringify(info))
 
 function converter(input) {
     let inputlines = input.split("\n");
@@ -45,13 +44,19 @@ function InlineFuncCallSet(obj) {
     let res = "";
     if (obj.func.name=="doctitle") { // DOC TITLE
         let blockargs = InlineFuncCall_BlockArgs(obj.func.blockargs);
-        console.log("title      :",blockargs)
         info.title = blockargs;
     }
-    if (obj.func.name=="description") { // DOC DESCRIPTION
+    else if (obj.func.name=="description") { // DOC DESCRIPTION
         let blockargs = InlineFuncCall_BlockArgs(obj.func.blockargs);
-        console.log("description:",blockargs)
-        info.desciption = blockargs;
+        info.description = blockargs;
+    }
+    else if (obj.func.name=="defabbr") { // DOC DESCRIPTION
+        let blockargs = InlineFuncCall_BlockArgs(obj.func.blockargs);
+        res += blockargs+` ( ${obj.func.normalargs} ) `;
+    }
+    else {
+        let blockargs = InlineFuncCall_BlockArgs(obj.func.blockargs);
+        res += blockargs;
     }
     return res;
 }

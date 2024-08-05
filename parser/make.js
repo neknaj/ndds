@@ -18,4 +18,5 @@ let replaced = parser
                 .replace("  SyntaxError: peg$SyntaxError,","//   SyntaxError: peg$SyntaxError,")
                 .replace("  parse:       peg$parse\n};","//   parse:       peg$parse\n// };")
 
+fs.writeFileSync(__dirname+'/lineparser.n.js', parser);
 fs.writeFileSync(__dirname+'/lineparser.js', replaced);
