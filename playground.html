@@ -13,7 +13,7 @@
         <meta property="og:type" content="website" />
         <meta name="twitter:title" content="NDDS Web Playground" />
         <meta property="og:title" content="NDDS Web Playground" />
-        <meta name="twitter:Description" content="You can try out NDDS in your browser" />
+        <meta name="twitter:description" content="You can try out NDDS in your browser" />
         <meta property="og:description" content="You can try out NDDS in your browser" />
         <meta property="og:site_name" content="Neknaj Project" />
         <script src="/nml.js"></script>
@@ -38,10 +38,7 @@
 
 initlayout(
     document.querySelector("#layoutroot"),
-    ["h",[3,2],[
-        ["c","editor"],
-        ["c","preview"],
-    ]],
+    window.innerWidth>window.innerHeight?["h",[3,2],[ ["c","editor"], ["c","preview"], ]]:["v",[3,2],[ ["c","preview"], ["c","editor"], ]],
     {
         editor: ()=>{return elm("div",{id:"container"},[])},
         preview: ()=>{return elm("nml-view",{id:"preview",class:["NDDS"]},[])},
