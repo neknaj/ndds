@@ -18,11 +18,21 @@
         border-left: 1px solid var(--nest-bar-color);
     }
 
-    & code {
-        color: var(--code-text-color);
-        background-color: var(--code-background-color);
+    & code.inline {
+        color: var(--code-inline-text-color);
+        background-color: var(--code-inline-background-color);
         border-radius: 5px;
         padding: 3px;
+    }
+
+    & .codeblock {
+        color: var(--code-block-text-color);
+        background-color: var(--code-block-background-color);
+        border-radius: 5px;
+        padding: 10px;
+        & code.block {
+            display: inline-block;
+        }
     }
 
     & h1, h2, h3, h4, h5, h6 {
@@ -59,7 +69,7 @@
     }
 
     & .align-right { text-align: right; }
-    & .align-center { text-align: center; }
+    & .align-center { text-align: center; margin: inherit auto; }
     & .align-left { text-align: left; }
     & .align-justify { text-align: justify; }
 

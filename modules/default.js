@@ -1,4 +1,5 @@
 import { elm, textelm } from '../runtime/cdom_module.js';
+import { Converter } from '../runtime/eval.js';
 
 
 const Inline = {
@@ -19,7 +20,7 @@ const Inline = {
         return elm("span",{},[textelm(title)]);
     },
     code(code) {
-        return elm("code",{},[textelm(gettext(code[0]))]);
+        return elm("code",{class:["inline"]},[textelm(gettext(code[0]))]);
     },
     img(_,src) {
         return elm("img",{src},[]);
@@ -45,7 +46,6 @@ const Inline = {
         ]);
     },
     card(dom,loc) {
-        console.log(loc)
         let card = elm("a",{href:loc},[textelm(loc)]);
         fetch(loc+"?info").then(res=>res.text().then(text=>{
             const info = JSON.parse(text);
@@ -57,6 +57,23 @@ const Inline = {
     },
 }
 const Block = {
+    code(arg,type) {
+        return elm("div",{class:["codeblock"]},[
+            elm("code",{class:["block"]},[textelm(arg.join("\n"))]),
+        ]);
+    },
+    tableFromJSON(arg,type) {
+        let data = JSON.parse(arg.join("\n"))
+        console.log(data)
+        return elm("table",{},[
+            elm("thead",{},data.label.map(x=>elm("th",{},[textelm(x)]))),
+            ...data.data.map(col=>
+                elm("tr",{},
+                    col.map(x=>elm("td",{},[textelm(x)])),
+                )
+            ),
+        ]);
+    },
     undefinedfunc(name) {
         return elm("div",{class:["note","error","undefinedfunc"]},[textelm("Function "), elm("code",{},[textelm(name)]), textelm(" is undefined")]);
     }

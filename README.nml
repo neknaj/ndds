@@ -9,31 +9,30 @@
 >>> !title{概要}$
     Bem130が作っているマークアップ言語と、それをWebブラウザで表示するためのツールです
     マークアップ言語の名前は!defabbr("Neknaj Markup Language"){NML}です
+    >>> !title{特徴}$
+        ・インデントによって入れ子構造を表現します
+        ・別ファイルで定義したJavaScriptの関数を呼び出すことでサイトの要素を作れます
+        ・名前によって機能(実体はJavascriptの関数)を表すため、機能毎に記法を覚えることなく書くことができます
+    >>> !title{動作}$
+        基本的には全てブラウザで動きます
+        WebサーバーからはNMLで書かれたドキュメントと、それをHTMLに変換する為のツールが送られます
 
->>> !title{特徴}$
-    ・インデントによって入れ子構造を表現します
-    ・別ファイルで定義したJavaScriptの関数を呼び出すことでサイトの要素を作れます
-    ・名前によって機能(実体はJavascriptの関数)を表すため、機能毎に記法を覚えることなく書くことができます
-
->>> !title{動作}$
-    基本的には全てブラウザで動きます
-    WebサーバーからはNMLで書かれたドキュメントと、それをHTMLに変換する為のツールが送られます
+>>> !title{仕様}$
+    !link("https://neknaj.com/ndds/doc")に纏めています
 
 >>> !title{使い方}$
     簡単な!link("https://neknaj.com/ndds/tutorial/ja/0.0"){チュートリアル}を準備中です
-
->>> !title{試す}$
-    簡単なプレイグラウンドを用意しています
-    デフォルトで提供しているモジュールの機能を使用することができます
-    $
-    ブラウザ上でコードを書いてリアルタイムにプレビューを見ることができます
-    シンタックスハイライトも使えます
-    !link("https://neknaj.github.io/ndds/playground.html"){playground.html}
-
->>> !title{例を見る}$
-    !link("https://neknaj.com"){Neknaj Projectのウェブサイト}は殆ど全てのページをNML/NDDSを使って記述しています
-    ここでは、各ページのURLの末尾に!code["?nml"]を付けることによってHTMLに変換する前の生のNMLコードを見ることができます
-    例として、このNDDSのreadmeファイルのNMLコードは!link("https://neknaj.com/ndds/README?nml")から見ることができます
+    >>> !title{試す}$
+        簡単なプレイグラウンドを用意しています
+        デフォルトで提供しているモジュールの機能を使用することができます
+        $
+        ブラウザ上でコードを書いてリアルタイムにプレビューを見ることができます
+        シンタックスハイライトも使えます
+        !link("https://neknaj.github.io/ndds/playground.html"){プレイグラウンドを開く}
+    >>> !title{例を見る}$
+        !link("https://neknaj.com"){Neknaj Projectのウェブサイト}は殆ど全てのページをNML/NDDSを使って記述しています
+        ここでは、各ページのURLの末尾に!code["?nml"]を付けることによってHTMLに変換する前の生のNMLコードを見ることができます
+        例として、このNDDSのreadmeファイルのNMLコードは!link("https://neknaj.com/ndds/README?nml")から見ることができます
 
 >>> !title{構成}$
     >>> !title{サーバー用ファイル}$

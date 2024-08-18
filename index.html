@@ -12,42 +12,41 @@
 !description{Bem130が作っているマークアップ言語と、それをWebブラウザで表示するためのツールです}$
 
 !img("https://img.shields.io/badge/-Javascript-7f5a28.svg?logo=javascript")$
- !img("https://img.shields.io/badge/-Node.js-335913.svg?logo=node.js")$
- !img("https://img.shields.io/badge/-VSCode-2062cf.svg")$
+    !img("https://img.shields.io/badge/-Node.js-335913.svg?logo=node.js")$
+    !img("https://img.shields.io/badge/-VSCode-2062cf.svg")$
 
 >>> !title{概要}$
     Bem130が作っているマークアップ言語と、それをWebブラウザで表示するためのツールです
     マークアップ言語の名前は!defabbr("Neknaj Markup Language"){NML}です
+    >>> !title{特徴}$
+        ・インデントによって入れ子構造を表現します
+        ・別ファイルで定義したJavaScriptの関数を呼び出すことでサイトの要素を作れます
+        ・名前によって機能(実体はJavascriptの関数)を表すため、機能毎に記法を覚えることなく書くことができます
+    >>> !title{動作}$
+        基本的には全てブラウザで動きます
+        WebサーバーからはNMLで書かれたドキュメントと、それをHTMLに変換する為のツールが送られます
 
->>> !title{特徴}$
-    ・インデントによって入れ子構造を表現します
-    ・別ファイルで定義したJavaScriptの関数を呼び出すことでサイトの要素を作れます
-    ・名前によって機能(実体はJavascriptの関数)を表すため、機能毎に記法を覚えることなく書くことができます
-
->>> !title{動作}$
-    基本的には全てブラウザで動きます
-    WebサーバーからはNMLで書かれたドキュメントと、それをHTMLに変換する為のツールが送られます
+>>> !title{仕様}$
+    !link("https://neknaj.com/ndds/doc")に纏めています
 
 >>> !title{使い方}$
     簡単な!link("https://neknaj.com/ndds/tutorial/ja/0.0"){チュートリアル}を準備中です
-
->>> !title{試す}$
-    簡単なプレイグラウンドを用意しています
-    デフォルトで提供しているモジュールの機能を使用することができます
-    $
-    ブラウザ上でコードを書いてリアルタイムにプレビューを見ることができます
-    シンタックスハイライトも使えます
-    !link("https://neknaj.github.io/ndds/playground.html"){playground.html}
-
->>> !title{例を見る}$
-    !link("https://neknaj.com"){Neknaj Projectのウェブサイト}は殆ど全てのページをNML/NDDSを使って記述しています
-    ここでは、各ページのURLの末尾に!code["?nml"]を付けることによってHTMLに変換する前の生のNMLコードを見ることができます
-    例として、このNDDSのreadmeファイルのNMLコードは!link("https://neknaj.com/ndds/README?nml")から見ることができます
+    >>> !title{試す}$
+        簡単なプレイグラウンドを用意しています
+        デフォルトで提供しているモジュールの機能を使用することができます
+        $
+        ブラウザ上でコードを書いてリアルタイムにプレビューを見ることができます
+        シンタックスハイライトも使えます
+        !link("https://neknaj.github.io/ndds/playground.html"){プレイグラウンドを開く}
+    >>> !title{例を見る}$
+        !link("https://neknaj.com"){Neknaj Projectのウェブサイト}は殆ど全てのページをNML/NDDSを使って記述しています
+        ここでは、各ページのURLの末尾に!code["?nml"]を付けることによってHTMLに変換する前の生のNMLコードを見ることができます
+        例として、このNDDSのreadmeファイルのNMLコードは!link("https://neknaj.com/ndds/README?nml")から見ることができます
 
 >>> !title{構成}$
     >>> !title{サーバー用ファイル}$
         一般的なHTTPサーバーにアップするだけでNMLをウェブページに埋め込むことができるように必要なファイル一式を纏めています
-        これの使い方は!link("https://neknaj.com/ndds/tutorial/ja/0.1"){チュートリアル0.1}で解説する予定です
+        これの使い方は!card("https://neknaj.com/ndds/tutorial/ja/0.1")で解説する予定です
     >>> !title{VSCode拡張機能}$
         VSCodeの拡張機能として、NMLのシンタックスハイライトとコード補完、プレビューを提供します
         プレビューではデフォルトで提供しているモジュールの機能を使用することができます
@@ -72,5 +71,6 @@
         width: 100dvw;
         height: 100dvh;
         white-space : pre;
+        overflow-x: hidden;
     }
 </style>

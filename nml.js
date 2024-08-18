@@ -32,7 +32,7 @@ class NeknajMarkupLanguageElement extends HTMLElement {
 
     update() {
         this.container.innerHTML = ``;
-        NML_Runtime.Converter(this.textContent,this.container,NML_Module);
+        NML_Runtime.Converter(this.textContent,this.container);
     }
 
     disconnectedCallback() {
@@ -91,7 +91,8 @@ window.addEventListener("load",async ()=>{
             NML_Module.Chain[j] = module.Chain[j]
         }
     }
-    console.log(NML_Module)
+    NML_Runtime.setModule(NML_Module);
+    // console.log(NML_Module)
     customElements.define("nml-view", NeknajMarkupLanguageElement);
 })
 function fRead(filename) {
