@@ -17,5 +17,9 @@
         ["[", "]"],
         ["(", ")"],
         ["\"", "\""],
-    ]
+    ],
+    "editor.autoIndent": "full",
+    "indentationRules": {
+        "indentNextLinePattern": "^((    )*)(>>>|>>\\$|<<<|<<=).*$"
+    }
 }

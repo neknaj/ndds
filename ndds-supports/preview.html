@@ -4,15 +4,49 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>NDDS View</title>
-        <script src="https://cdn.jsdelivr.net/gh/neknaj/ndds@af19cb8/nml.js"></script>
-        <link href="https://cdn.jsdelivr.net/gh/neknaj/ndds@af19cb8/theme/dark.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/gh/neknaj/ndds@56d864c/nml.js"></script>
     </head>
 <body>
+<header>
+    <nav>
+        <div class="pageheader_right">
+            <button onclick="toggleTheme()">Toggle Theme</button>
+            <input type="range" oninput="scale(this.value)" min="-0.5" max="1" step="0.05" value="0">Scale</input>
+        </div>
+    </nav>
+</header>
 <nml-view>
 ${content}
 </nml-view>
 </body>
 </html>
+<script>
+
+window.onload = ()=>{
+    const vsdark = ${vsdark}
+    console.log(vsdark)
+    if (!vsdark){
+        toggleTheme();
+    }
+}
+
+function toggleTheme() {
+    const elm = document.getElementsByTagName("html")[0];
+    elm.classList.toggle('light-theme');
+    if (elm.classList.contains('light-theme')) {
+        elm.classList.remove('dark-theme');
+    } else {
+        elm.classList.add('dark-theme');
+    }
+}
+
+function scale(value) {
+    const scale = 10**value
+    const nmlview = document.getElementsByTagName("nml-view")[0];
+    nmlview.style.setProperty("--page-scale",scale);
+}
+
+</script>
 <style>
     :root {
         color-scheme: var(--color-scheme);
@@ -23,10 +57,22 @@ ${content}
         font-family: serif;
         display: block;
         position: absolute;
-        top: 0;
+        top: 25px;
         left: 0;
-        width: 100dvw;
-        height: 100dvh;
+        width: 100%;
         white-space : pre;
+    }
+    nml-view {
+        /* ページ全体を2倍に拡大 */
+        --page-scale: 1;
+        background-color: var(--background-color);
+        transform: scale(var(--page-scale));
+        transform-origin: top left; /* スケールの起点を左上に設定 */
+        width: calc(100% / var(--page-scale));
+        margin: 0; /* 余白をなくす */
+        padding: 0;
+    }
+    input {
+        width: 20dvw;
     }
 </style>

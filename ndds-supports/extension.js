@@ -72,11 +72,14 @@ function updateContent(panel, context) {
 }
 
 function getWebviewContent(content, webview, context) {
+    const colorTheme = vscode.window.activeColorTheme;
+    const isDarkTheme = (colorTheme.kind === vscode.ColorThemeKind.Dark || colorTheme.kind === vscode.ColorThemeKind.HighContrast);
     const editor = vscode.window.activeTextEditor;
     const htmlPath = path.join(context.extensionPath, "./preview.html");
     try {
         let html = fs.readFileSync(htmlPath, 'utf-8');
         html = html.replace('${content}', content.replaceAll("\\","\\\\"));
+        html = html.replace('${vsdark}', isDarkTheme.toString());
         return html;
     } catch (error) {
         console.error(`Failed to read HTML template: ${error}`);
@@ -163,6 +166,18 @@ class DefFuncCompletions
             comp.push(sni);
         }
         {
+            const sni = new vscode.CompletionItem("card");
+            sni.insertText = new vscode.SnippetString("card(\"${1}\")");
+            sni.kind = vscode.CompletionItemKind.Function;
+            comp.push(sni);
+        }
+        {
+            const sni = new vscode.CompletionItem("code block");
+            sni.insertText = new vscode.SnippetString("code\n    <<= ${1}");
+            sni.kind = vscode.CompletionItemKind.Function;
+            comp.push(sni);
+        }
+        {
             const sni = new vscode.CompletionItem("align");
             sni.insertText = new vscode.SnippetString("align(\"${1|center,right,left,justify|}\")");
             sni.kind = vscode.CompletionItemKind.Function;
@@ -179,6 +194,21 @@ class IndentCompletions
         {
             const sni = new vscode.CompletionItem("indent");
             sni.insertText = ">>> ";
+            comp.push(sni);
+        }
+        {
+            const sni = new vscode.CompletionItem("indent block call");
+            sni.insertText = ">>$ ";
+            comp.push(sni);
+        }
+        {
+            const sni = new vscode.CompletionItem("indent block arg nml");
+            sni.insertText = "<<< ";
+            comp.push(sni);
+        }
+        {
+            const sni = new vscode.CompletionItem("indent block arg txt");
+            sni.insertText = "<<= ";
             comp.push(sni);
         }
         return comp;

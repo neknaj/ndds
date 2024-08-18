@@ -1,19 +1,10 @@
-<!DOCTYPE html>
-<html class="dark-theme">
-    <head>
-        <meta charset="UTF-8">
-        <title>NDDS View</title>
-        <script src="./nml.js"></script>
-    </head>
-<body>
-<nml-view>
 !doctitle{!defabbr("Neknaj Document Description System"){NDDS}}->align("center")$
 
 !description{Bem130が作っているマークアップ言語と、それをWebブラウザで表示するためのツールです}$
 
 !img("https://img.shields.io/badge/-Javascript-7f5a28.svg?logo=javascript")$
-    !img("https://img.shields.io/badge/-Node.js-335913.svg?logo=node.js")$
-    !img("https://img.shields.io/badge/-VSCode-2062cf.svg")$
+ !img("https://img.shields.io/badge/-Node.js-335913.svg?logo=node.js")$
+ !img("https://img.shields.io/badge/-VSCode-2062cf.svg")$
 
 >>> !title{概要}$
     Bem130が作っているマークアップ言語と、それをWebブラウザで表示するためのツールです
@@ -28,6 +19,22 @@
 
 >>> !title{仕様}$
     !link("https://neknaj.com/ndds/doc")に纏めています
+
+>>> !title{hello}$
+
+
+>>> !title{code block のテスト}$
+    >>$ code
+        <<= これは文字列の引数です
+            複数行に対応しています
+            シンタックスハイライトでも文字列の色になります
+    $
+    >>$ code
+        <<< !doctitle{これはnmlです}$
+            シンタックスハイライトでもnmlとしてハイライトされます
+            >>> !title{hello}$
+            >>$ code
+                <<< hello
 
 >>> !title{使い方}$
     簡単な!link("https://neknaj.com/ndds/tutorial/ja/0.0"){チュートリアル}を準備中です
@@ -55,21 +62,3 @@
 
 >>> !title{Githubリポジトリ}$
     !link("https://github.com/neknaj/ndds"){https://github.com/neknaj/ndds}
-</nml-view>
-</body>
-</html>
-<style>
-    :root {
-        color-scheme: var(--color-scheme);
-        font-family: serif;
-    }
-    nml-view {
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100dvh;
-        white-space : pre;
-    }
-</style>
