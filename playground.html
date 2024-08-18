@@ -17,8 +17,6 @@
         <meta property="og:description" content="You can try out NDDS in your browser" />
         <meta property="og:site_name" content="Neknaj Project" />
         <script src="./nml.js"></script>
-        <link href="./theme/dark.css" rel="stylesheet">
-        <link href="./theme/light.css" rel="stylesheet">
     </head>
     <body>
         <header>
@@ -108,7 +106,7 @@ function copyhtml() {
     navigator.clipboard.writeText(preview.innerHTML);
 }
 function copynml() {
-    navigator.clipboard.writeText(input.getValue());
+    navigator.clipboard.writeText(preview.innerNML);
 }
 
 window.onload = async ()=>{
@@ -203,9 +201,16 @@ function toggleTheme() {
         height: 100%;
         width: 100%;
     }
-    #preview {
-        height: calc(100% - 40px);
-        overflow: scroll;
+</style>
+<style>
+    nml-view {
+        color: rgb(128,128,128,0.1);
+        display: block;
+        width: 100%;
+        height: 100%;
+        white-space : pre;
+        overflow-y: auto;
+        background-color: var(--background-color);
     }
 </style>
 <style>

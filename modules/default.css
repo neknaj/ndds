@@ -1,19 +1,19 @@
 .NDDS {
-    height: calc(100% - 40px);
-    overflow-y: scroll;
+    width: calc(100% - 20px);
     white-space: break-spaces;
-    padding: 20px;
-    background-color: var(--background-color);
     color: var(--text-color);
+    padding-left: 10px;
 
     & div {
+        width: 100%;
+    }
+
+    & div.nest {
+        width: calc(100% - 50px);
         margin: 10px;
         margin-left: 10px;
         padding: 5px;
         border-radius: 5px;
-    }
-
-    & div.nest {
         padding-left: 15px;
         border-left: 1px solid var(--nest-bar-color);
     }
@@ -26,6 +26,7 @@
     }
 
     & h1, h2, h3, h4, h5, h6 {
+        width: calc(100% - 40px);
         color: var(--title-text-color);
         padding-top: 4px;
         padding-bottom: 4px;
@@ -35,10 +36,9 @@
         background-color: var(--title-background-color);
         border-left: 5px solid var(--title-accent-left-color);
         border-bottom: 2px solid var(--title-accent-right-color);
+        margin: 5px;
         margin-top: 10px;
         margin-bottom: 10px;
-        margin-left: -5px;
-        margim-right: -5px;
     }
 
     & .doctitle {
@@ -46,6 +46,7 @@
         font-size: 190%;
         padding-top: 8px;
         padding-bottom: 8px;
+        width: calc(100% - 48px);
     }
 
     & a {
@@ -61,6 +62,7 @@
     & .align-center { text-align: center; }
     & .align-left { text-align: left; }
     & .align-justify { text-align: justify; }
+
 
     & div.note {
         background-color: var(--note-background-color);
@@ -79,6 +81,32 @@
             &::before {
                 content: "error";
             }
+        }
+    }
+
+    & table {
+        display: block;
+        width: fit-content;
+        max-width: 100%;
+        border-radius: 5px;
+        overflow: auto;
+        & td {
+            padding: 0px 4px 0px 4px;
+            overflow: hidden;
+        }
+        & th {
+            padding: 0px 4px 0px 4px;
+        }
+        & thead th {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        & th:first-child {
+            position: -webkit-sticky;
+            position: sticky;
+            left: 0;
+            z-index: 1;
         }
     }
 }

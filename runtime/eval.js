@@ -1,7 +1,7 @@
 // for Client Side ( Web Browser )
 
-import { elm, textelm } from '../cdom_module.js';
-import {peg$parse as lineparser} from '../parser/lineparser.js';
+import { elm, textelm } from './cdom_module.js';
+import {peg$parse as lineparser} from './lineparser.js';
 
 var Module = {};
 let Indent = 0;
@@ -67,7 +67,7 @@ function NML(obj,parent) {
 }
 
 function NMLText(obj) {
-    return Module.default.text(obj.text);
+    return Module.Inline.text(obj.text);
 }
 
 function InlineFuncCallSet(obj) {
@@ -76,23 +76,23 @@ function InlineFuncCallSet(obj) {
     { // func
         let blockargs = InlineFuncCall_BlockArgs(obj.func.blockargs);
         let args = [blockargs].concat(obj.func.normalargs);
-        if (Module.default[obj.func.name]==null) {
+        if (Module.Inline[obj.func.name]==null) {
             error = true;
-            res = Module.default.undefinedfunc.bind({Indent})(obj.func.name);
+            res = Module.Inline.undefinedfunc.bind({Indent})(obj.func.name);
         }
         else {
-            res = Module.default[obj.func.name].bind({Indent})(...args);
+            res = Module.Inline[obj.func.name].bind({Indent})(...args);
         }
     }
     if (!error) { // chain
         for (let i of obj.chain) {
-            if (Module.default[i.name]==null) {
+            if (Module.Chain[i.name]==null) {
                 error = true;
-                res = Module.default.undefinedfunc.bind({Indent})(i.name);
+                res = Module.Chain.undefinedfunc.bind({Indent})(i.name);
                 break;
             }
             else {
-                res = Module.default[i.name].bind({Indent})(...[res].concat(i.args));
+                res = Module.Chain[i.name].bind({Indent})(...[res].concat(i.args));
             }
         }
     }

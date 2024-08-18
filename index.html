@@ -1,3 +1,12 @@
+<!DOCTYPE html>
+<html class="dark-theme">
+    <head>
+        <meta charset="UTF-8">
+        <title>NDDS View</title>
+        <script src="./nml.js"></script>
+    </head>
+<body>
+<nml-view>
 !doctitle{!defabbr("Neknaj Document Description System"){NDDS}}->align("center")$
 
 !description{Bem130が作っているマークアップ言語と、それをWebブラウザで表示するためのツールです}$
@@ -47,3 +56,21 @@
 
 >>> !title{Githubリポジトリ}$
     !link("https://github.com/neknaj/ndds"){https://github.com/neknaj/ndds}
+</nml-view>
+</body>
+</html>
+<style>
+    :root {
+        color-scheme: var(--color-scheme);
+        font-family: serif;
+    }
+    nml-view {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100dvw;
+        height: 100dvh;
+        white-space : pre;
+    }
+</style>

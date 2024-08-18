@@ -5,6 +5,9 @@
 //
 // pegjsが無い場合は
 // $ npm install pegjs (-g)
+//
+// このツールはpegjsの出力であるlineparser.jsを直接置き換えるため、複数回実行すると正常に動きません
+// pegjsのコンパイルとセットで実行してください
 
 const fs = require('fs');
 

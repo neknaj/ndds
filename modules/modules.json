@@ -1,0 +1,12 @@
+{
+    "js": [
+        "default"
+    ],
+    "style": [
+        "default"
+    ],
+    "theme": [
+        "theme/dark",
+        "theme/light"
+    ]
+}
