@@ -6,9 +6,15 @@ import {peg$parse as lineparser} from './lineparser.js';
 var Module = {};
 let Indent = 0;
 
-Array.prototype.last = function(n=1) {
-    return this[this.length-n];
-};
+
+Object.defineProperty(Array.prototype, 'last', {
+    value: function(n=1) {
+        return this[this.length-n];
+    },
+    writable: true,
+    configurable: true,
+    enumerable: false
+});
 
 export function setModule(module) {
     Module = module;
@@ -16,68 +22,57 @@ export function setModule(module) {
 
 export function Converter(input,parent) {
     input += "\n";
-    let inputlines = input.split("\n");
+    let inputlines = input.split("\n"); // 入力を行毎に分ける
     let lastLn = inputlines.length;
-    let nestList = [parent];
-    for (let ln=1;ln<lastLn;ln++) {
-        // line.indentがある場合、nestListにdiv要素を追加する (">>>" )
+    let nestList = [parent]; // 各インデントに対応する要素を保存 スタックとして扱う これの要素数-1,つまり`nestList.length-1`がその時点でのインデントの深さになる
+    for (let ln=1;ln<lastLn;ln++) { // lnは行番号 line-number
         {
             let newindent = countIndent(inputlines,ln);
             while (newindent<nestList.length-1) {
                 nestList.pop();
             }
         }
-        let line = lineparser(input,{line:ln,col:(nestList.length-1)*4});
+        let line = lineparser(input,{line:ln,col:(nestList.length-1)*4}); // pegjsを使ってインデント以外の部分を解析する
 
         if (line.indent==">>$ ") { // ブロック呼び出し
             ln++;
             const baseindent = nestList.length;
             line.func.blockargs = [];
-            // console.log("基準インデント",nestList.length)
-            // console.log("ブロック呼び出し")
-            // console.log(line)
             while (ln<lastLn) { // ブロック呼び出しの引数
                 let newindent = countIndent(inputlines,ln);
-                if (newindent!=baseindent) {
-                    ln--; break;
-                }
-                if (inputlines[ln-1].startsWith("<<= ",baseindent*4) | inputlines[ln-1].startsWith("<<< ",baseindent*4)) { // ブロック文字列引数
+                if (newindent!=baseindent) {ln--; break;} // インデントの数が異なる場合はブロック呼び出しを終了
+                if (inputlines[ln-1].startsWith("<<= ",baseindent*4) | inputlines[ln-1].startsWith("<<< ",baseindent*4)) { // ブロック呼び出しの引数
                     const argtype = inputlines[ln-1].startsWith("<<< ",baseindent*4)?"BlockNMLArg":"BlockTXTArg";
-                    let TXTarg = [];
-                    TXTarg.push(inputlines[ln-1].substring((baseindent+1)*4))
+                    let arg = [inputlines[ln-1].substring((baseindent+1)*4)]; // 引数を行毎に配列に追加
                     while (ln<lastLn) {
                         ln++;
                         let newindent = countIndent(inputlines,ln);
-                        if (newindent<baseindent+1) {ln--;break;}
-                        TXTarg.push(inputlines[ln-1].substring((baseindent+1)*4))
+                        if (newindent<baseindent+1) {ln--;break;} // インデントの数が基準を下回ったら引数を終了
+                        arg.push(inputlines[ln-1].substring((baseindent+1)*4));
                     }
-                    line.func.blockargs.push({type:argtype,arg:TXTarg.join("\n")});
+                    line.func.blockargs.push({type:argtype,arg:arg.join("\n")}); // pegjsのパーサで作った解析木にブロック呼び出しの引数を追加
                 }
-                else {
-                    ln--; break;
-                }
+                else {ln--; break;}
                 ln++;
             }
-            NMLBlockCall(line,nestList.last())
-            continue;
+            NMLBlockCall(line,nestList.last()); // NMLを評価する
         }
-
-        // ブロック呼び出しでない普通の行
-
-        if (line.indent==">>> ") { // インデント追加
-            let newelm = elm("div",{class:["nest"]},[]);
-            nestList.last().Add(newelm);
-            nestList.push(newelm);
+        else { // ブロック呼び出しでない普通の行
+            // line.indentがある場合、nestListにdiv要素を追加する (">>> " )
+            if (line.indent==">>> ") { // インデント追加
+                let newelm = elm("div",{class:["nest"]},[]);
+                nestList.last().Add(newelm);
+                nestList.push(newelm);
+            }
+            Indent = nestList.length-1;
+            NMLLine(line,nestList.last()); // NMLを評価する
+            if ((line.linebreak&&line.res.length!=0)||(!line.linebreak&&line.res.length==0)) { // 改行の処理
+                nestList.last().Add(elm("br",{},[]));
+            }
         }
-        Indent = nestList.length-1;
-        NMLLine(line,nestList.last()); // NMLを評価する
-        if ((line.linebreak&&line.res.length!=0)||(!line.linebreak&&line.res.length==0)) { // 改行の処理
-            nestList.last().Add(elm("br",{},[]));
-        }
-
     }
 }
-function countIndent(ils,ln) {
+function countIndent(ils,ln) { // 行頭のインデントの数を数えます インデントは4つが基準なので、行頭のスペースの数を4で割って返します
     let i = 0;
     while (ils[ln-1][i]==" ") {i++;}
     return i/4;
@@ -172,7 +167,6 @@ function BlockFuncCallSet(obj) {
     let error = false;
     { // func
         let [blockargs,argstype] = BlockFuncCall_BlockArgs(obj.func.blockargs);
-        console.log(blockargs,argstype)
         let args = [blockargs,argstype].concat(obj.func.normalargs);
         if (Module.Block[obj.func.name]==null) {
             error = true;

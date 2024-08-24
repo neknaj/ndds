@@ -49,7 +49,6 @@ const Inline = {
         let card = elm("a",{href:loc},[textelm(loc)]);
         fetch(loc+"?info").then(res=>res.text().then(text=>{
             const info = JSON.parse(text);
-            console.log(info)
             card.innerHTML = info.title;
             card.alt = info.description;
         }))

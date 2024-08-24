@@ -33,6 +33,7 @@ class NeknajMarkupLanguageElement extends HTMLElement {
     update() {
         this.container.innerHTML = ``;
         NML_Runtime.Converter(this.textContent,this.container);
+        document.dispatchEvent(new CustomEvent("NMLUpdate",{bubbles:true,cancelable:true}));
     }
 
     disconnectedCallback() {
