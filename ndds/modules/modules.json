@@ -1,12 +1,9 @@
 {
     "js": [
-        "default",
-        "mathformula/mathformula"
+        "default"
     ],
     "style": [
-        "default",
-        "mathformula/mathformula",
-        "https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css"
+        "default"
     ],
     "theme": [
         "theme/dark",
