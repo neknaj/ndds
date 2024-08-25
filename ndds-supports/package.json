@@ -4,7 +4,7 @@
     "author": "Bem130 <bem130@ymail.ne.jp> (https://github.com/bem130)",
     "displayName": "NDDS Supports",
     "description": "NDDS Supports - Syntax Highlight, Preview, Snippet for VSCode",
-    "version": "1.0.1",
+    "version": "1.2.1",
     "engines": {
         "vscode": "^1.91.0"
     },
@@ -28,9 +28,21 @@
         "commands": [{
             "command": "nddssupports.showPreview",
             "title": "show NDDS Preview"
-        }]
+        }],
+        "iconThemes": [
+            {
+                "id": "nddsIconSet",
+                "label": "ndds Icon Set",
+                "path": "./file-icons.json"
+            }
+        ]
     },
     "devDependencies": {
         "@types/vscode": "^1.91.0"
-    }
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/neknaj/ndds.git"
+    },
+    "license": "MIT"
 }

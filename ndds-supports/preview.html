@@ -4,14 +4,14 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>NDDS View</title>
-        <script src="https://cdn.jsdelivr.net/gh/neknaj/ndds@56d864c/nml.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/neknaj/ndds@ff79e51/nml.js"></script>
     </head>
 <body>
 <header>
     <nav>
         <div class="pageheader_right">
             <button onclick="toggleTheme()">Toggle Theme</button>
-            <input type="range" oninput="scale(this.value)" min="-0.5" max="1" step="0.05" value="0">Scale</input>
+            <input type="range" oninput="scale(this.value)" min="-0.5" max="1" step="0.05" value="0.2">Scale</input>
         </div>
     </nav>
 </header>
@@ -28,6 +28,7 @@ window.onload = ()=>{
     if (!vsdark){
         toggleTheme();
     }
+    scale(0.2);
 }
 
 function toggleTheme() {
@@ -48,13 +49,19 @@ function scale(value) {
 
 </script>
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200..900&display=swap');
     :root {
         color-scheme: var(--color-scheme);
         font-family: serif;
     }
+    body {
+        font-family: "Noto Serif JP", serif;
+        font-optical-sizing: auto;
+        font-weight: 200;
+        font-style: normal;
+    }
     nml-view {
         color: rgba(0, 0, 0, 0);
-        font-family: serif;
         display: block;
         position: absolute;
         top: 25px;

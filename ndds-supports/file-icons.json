@@ -1,0 +1,10 @@
+{
+    "iconDefinitions": {
+        "nmlIcon": {
+            "iconPath": "./nml.svg"
+        }
+    },
+    "fileExtensions": {
+        "nml": "nmlIcon"
+    },
+}
