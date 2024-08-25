@@ -27,7 +27,7 @@ export function Converter(input,parent) {
     let inputlines = input.split("\n");
     let lastLn = inputlines.length;
     let nestList = [parent];
-    struct = {"doctitle":"",child:[]};
+    struct = {doctitle:"",elm:parent,child:[]};
     structscope = struct;
     let structList = [struct];
     for (let ln=1;ln<lastLn;ln++) {
@@ -78,13 +78,13 @@ export function Converter(input,parent) {
         // ブロック呼び出しでない普通の行
 
         if (line.indent==">>> ") { // インデント追加
+            let newelm = elm("div",{class:["nest"]},[]);
             {
-                let newelm = elm("div",{class:["nest"]},[]);
                 nestList.last().Add(newelm);
                 nestList.push(newelm);
             }
             {
-                let tmp = {"title":"",child:[]};
+                let tmp = {title:"",elm:newelm,child:[]};
                 structscope.child.push(tmp);
                 structscope = tmp;
                 structList.push(tmp);
