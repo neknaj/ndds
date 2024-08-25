@@ -26,7 +26,13 @@ function converter(input) {
                 nestList.pop();
             }
         }
-        let line = lineparser(input,{line:ln,col:(nestList.length-1)*4});
+        let line;
+        try {
+            line = lineparser(input,{line:ln,col:(nestList.length-1)*4});
+        }
+        catch (e) {
+            continue;
+        }
 
         if (line.indent==">>$ ") { // ブロック呼び出し
             ln++;

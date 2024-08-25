@@ -18,7 +18,7 @@ class NeknajMarkupLanguageElement extends HTMLElement {
         for (let i of NML_Modules.style) {
             const styleLink = document.createElement('link');
             styleLink.setAttribute('rel', 'stylesheet');
-            styleLink.setAttribute('href', currentScriptDir+'/modules/'+i+".css");
+            styleLink.setAttribute('href', i.startsWith("http")?i:(currentScriptDir+'/modules/'+i+".css"));
             shadow.appendChild(styleLink);
         }
 
@@ -76,7 +76,7 @@ window.addEventListener("load",async ()=>{
     for (let i of NML_Modules.theme) {
         const styleLink = document.createElement('link');
         styleLink.setAttribute('rel', 'stylesheet');
-        styleLink.setAttribute('href', currentScriptDir+'/modules/'+i+".css");
+        styleLink.setAttribute('href', i.startsWith("http")?i:(currentScriptDir+'/modules/'+i+".css"));
         document.head.appendChild(styleLink);
     }
     NML_Runtime = await import(currentScriptDir+'/runtime/eval.js');
