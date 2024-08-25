@@ -1,0 +1,17 @@
+.NDDS {
+    & .mathinlineformula {
+        color: var(--code-inline-text-color);
+        width: fit-content;
+        line-height: 2;
+    }
+    & .mathblockformula {
+        width: fit-content;
+        color: var(--code-block-text-color);
+        background-color: var(--code-block-background-color);
+        border-radius: 5px;
+        padding: 10px;
+        & span.base {
+            line-height: 2;
+        }
+    }
+}
