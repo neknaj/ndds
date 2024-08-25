@@ -77,7 +77,7 @@ function createIndex(child) {
         child.map(c=>{
             console.log(c)
             return elm("ul",{},[
-                elm("span",{class:"indexlink"},[textelm(c.title)]).Listen("click",(e)=>{c.elm.scrollIntoView();}),
+            elm("span",{class:"indexlink"},[textelm(c.title)]).Listen("click",(e)=>{c.elm.scrollIntoView();window.scrollBy(0, -40);}),
                 createIndex(c.child)
             ])
         })
