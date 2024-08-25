@@ -2,13 +2,13 @@ class NeknajMarkupLanguageElement extends HTMLElement {
     constructor () {
         super();
         // Shadow DOMの作成
-        const shadow = this.attachShadow({ mode: 'open' });
+        this.shadow = this.attachShadow({ mode: 'open' });
 
         // 子要素を表示するためのコンテナを作成
         this.container = document.createElement('div');
         this.container.classList.add("NDDS");
-        shadow.appendChild(this.container);
-        NML_Elements.push(shadow);
+        this.shadow.appendChild(this.container);
+        NML_Elements.push(this);
 
         // MutationObserverの設定
         this.observer = new MutationObserver(() => {
@@ -19,11 +19,12 @@ class NeknajMarkupLanguageElement extends HTMLElement {
             const styleLink = document.createElement('link');
             styleLink.setAttribute('rel', 'stylesheet');
             styleLink.setAttribute('href', i.startsWith("http")?i:(currentScriptDir+'/modules/'+i+".css"));
-            shadow.appendChild(styleLink);
+            this.shadow.appendChild(styleLink);
         }
 
         // 子要素の変更を監視
         this.observer.observe(this, { childList: true, subtree: true });
+        this.struct = {doctitle:"",child:[]};
     }
 
     connectedCallback() {
@@ -32,7 +33,7 @@ class NeknajMarkupLanguageElement extends HTMLElement {
 
     update() {
         this.container.innerHTML = ``;
-        NML_Runtime.Converter(this.textContent,this.container);
+        this.struct = NML_Runtime.Converter(this.textContent,this.container);
         document.dispatchEvent(new CustomEvent("NMLUpdate",{bubbles:true,cancelable:true}));
     }
 
@@ -61,8 +62,8 @@ const NML_Modules = JSON.parse(fRead(currentScriptDir+'/modules/'+"modules.json"
 
 function NMLquerySelector(selector) {
     for (let i of NML_Elements) {
-        if (i.querySelector(selector)!=null) {
-            return i.querySelector(selector);
+        if (i.shadow.querySelector(selector)!=null) {
+            return i.shadow.querySelector(selector);
         }
     }
     return null;
@@ -96,6 +97,7 @@ window.addEventListener("load",async ()=>{
     // console.log(NML_Module)
     customElements.define("nml-view", NeknajMarkupLanguageElement);
 })
+
 function fRead(filename) {
     var hr = new XMLHttpRequest();
     hr.open("GET", filename, false);

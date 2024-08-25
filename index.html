@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <title>NDDS View</title>
         <script src="./ndds/nml.js"></script>
+        <script src="/cdom.js"></script>
     </head>
 <body>
 <nml-view>
@@ -56,20 +57,67 @@
 >>> !title{Githubリポジトリ}$
     !link("https://github.com/neknaj/ndds"){https://github.com/neknaj/ndds}
 </nml-view>
+<section id="index">
+</section>
 </body>
 </html>
+<script>
+document.addEventListener("NMLUpdate",async ()=>{ // インデックスを作る
+    let indexelm = document.querySelector("#index");
+    indexelm.innerHTML = "";
+    for (let e of NML_Elements){
+        console.log(e.struct)
+        indexelm.Add(elm("span",{},[textelm(e.struct.doctitle)]));
+        indexelm.Add(createIndex(e.struct.child));
+    }
+})
+function createIndex(child) {
+    console.log(child)
+    return elm("div",{},
+        child.map(c=>{
+            console.log(c)
+            return elm("ul",{},[
+                elm("span",{},[textelm(c.title)]),
+                createIndex(c.child)
+            ])
+        })
+    )
+}
+</script>
 <style>
     :root {
         color-scheme: var(--color-scheme);
         font-family: serif;
+    }
+    body {
+        background-color: var(--background-color);
     }
     nml-view {
         display: block;
         position: absolute;
         top: 0;
         left: 0;
-        width: 100%;
+        width: calc(100% - 400px);
         height: 100dvh;
         white-space : pre;
+    }
+    #index {
+        padding: 5px;
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: calc(400px - 10px);
+        font-size: 90%;
+        & > span {
+            font-size: 110%;
+        }
+        & ul {
+            padding-left: 1em;
+            margin: 10px;
+        }
+        & > div > ul {
+            padding-left: 0;
+        }
     }
 </style>

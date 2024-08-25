@@ -5,6 +5,8 @@ import {peg$parse as lineparser} from './lineparser.js';
 
 var Module = {};
 let Indent = 0;
+let struct;
+let structscope;
 
 
 Object.defineProperty(Array.prototype, 'last', {
@@ -25,12 +27,17 @@ export function Converter(input,parent) {
     let inputlines = input.split("\n");
     let lastLn = inputlines.length;
     let nestList = [parent];
+    struct = {"doctitle":"",child:[]};
+    structscope = struct;
+    let structList = [struct];
     for (let ln=1;ln<lastLn;ln++) {
         // line.indentがある場合、nestListにdiv要素を追加する (">>>" )
         {
             let newindent = countIndent(inputlines,ln);
             while (newindent<nestList.length-1) {
                 nestList.pop();
+                structList.pop();
+                structscope = structList.last();
             }
         }
         let line = lineparser(input,{line:ln,col:(nestList.length-1)*4});
@@ -71,9 +78,17 @@ export function Converter(input,parent) {
         // ブロック呼び出しでない普通の行
 
         if (line.indent==">>> ") { // インデント追加
-            let newelm = elm("div",{class:["nest"]},[]);
-            nestList.last().Add(newelm);
-            nestList.push(newelm);
+            {
+                let newelm = elm("div",{class:["nest"]},[]);
+                nestList.last().Add(newelm);
+                nestList.push(newelm);
+            }
+            {
+                let tmp = {"title":"",child:[]};
+                structscope.child.push(tmp);
+                structscope = tmp;
+                structList.push(tmp);
+            }
         }
         Indent = nestList.length-1;
         NMLLine(line,nestList.last()); // NMLを評価する
@@ -82,7 +97,10 @@ export function Converter(input,parent) {
         }
 
     }
+
+    return struct;
 }
+
 function countIndent(ils,ln) {
     let i = 0;
     while (ils[ln-1][i]==" ") {i++;}
@@ -133,6 +151,14 @@ function InlineFuncCallSet(obj) {
         }
         else {
             res = Module.Inline[obj.func.name].bind({Indent})(...args);
+        }
+        {
+            if (obj.func.name=="doctitle") { // DOC TITLE
+                if (struct.doctitle=="") {struct.doctitle = blockargs[0][0].innerText;}
+            }
+            else if (obj.func.name=="title") { // TITLE
+                if (structscope.title=="") {structscope.title = blockargs[0][0].innerText;}
+            }
         }
     }
     if (!error) { // chain

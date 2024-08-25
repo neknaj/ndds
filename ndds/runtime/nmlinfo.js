@@ -5,9 +5,19 @@ const lineparser = require('./lineparser.n.js').parse;
 const info = {
     "title": "",
     "description": "",
+    "struct": [],
 }
 
+Object.defineProperty(Array.prototype, 'last', {
+    value: function(n=1) {
+        return this[this.length-n];
+    },
+    writable: true,
+    configurable: true,
+    enumerable: false
+});
 
+let structscope;
 function converter(input) {
     input = input.replaceAll("\r\n","\n");
     info.title = "no title";
@@ -17,13 +27,16 @@ function converter(input) {
     let inputlines = input.split("\n");
     let lastLn = inputlines.length;
     let nest = 0;
-    let nestList = [null];
+    info.struct = {"doctitle":"",child:[]};
+    structscope = info.struct;
+    nestList = [info.struct];
     for (let ln=1;ln<lastLn;ln++) {
         // line.indentがある場合、nestListにdiv要素を追加する (">>>" )
         {
             let newindent = countIndent(inputlines,ln);
             while (newindent<nestList.length-1) {
                 nestList.pop();
+                structscope = nestList.last();
             }
         }
         let line;
@@ -65,7 +78,10 @@ function converter(input) {
 
 
         if (line.indent==">>> ") { // インデント追加
-            nestList.push(null);
+            let tmp = {"title":"",child:[]};
+            structscope.child.push(tmp);
+            structscope = tmp;
+            nestList.push(tmp);
         }
         Indent = nestList.length-1;
         NML(line.res); // NMLを評価する
@@ -93,6 +109,11 @@ function InlineFuncCallSet(obj) {
     if (obj.func.name=="doctitle") { // DOC TITLE
         let blockargs = InlineFuncCall_BlockArgs(obj.func.blockargs);
         info.title = blockargs;
+        if (info.struct.doctitle=="") {info.struct.doctitle = blockargs;}
+    }
+    else if (obj.func.name=="title") { // TITLE
+        let blockargs = InlineFuncCall_BlockArgs(obj.func.blockargs);
+        if (structscope.title=="") {structscope.title = blockargs;}
     }
     else if (obj.func.name=="description") { // DOC DESCRIPTION
         let blockargs = InlineFuncCall_BlockArgs(obj.func.blockargs);
