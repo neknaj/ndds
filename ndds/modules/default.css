@@ -25,6 +25,10 @@
         padding: 3px;
     }
 
+    & .comment {
+        display: none;
+    }
+
     & .codeblock {
         color: var(--code-block-text-color);
         background-color: var(--code-block-background-color);

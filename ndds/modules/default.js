@@ -55,6 +55,11 @@ const Inline = {
     },
 }
 const Block = {
+    comment(arg,type) {
+        return elm("div",{class:["comment"]},[
+            elm("code",{class:["block"]},[textelm(arg.join("\n"))]),
+        ]);
+    },
     code(arg,type) {
         return elm("div",{class:["codeblock"]},[
             elm("code",{class:["block"]},[textelm(arg.join("\n"))]),
